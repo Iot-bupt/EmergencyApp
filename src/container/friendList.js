@@ -22,7 +22,7 @@ class FriendListScreen extends React.Component {
 
                 <View style={styles.chatItem}>
                     <View style={{ height: 20, width: 20}}>
-                        <Icon name="md-people" size={20} color='rgb(222,87,66)'/>
+                        <Icon name="md-people" size={20} color='#1EA114'/>
                     </View>
                     <View style={{ marginHorizontal: 10 }}>
                         <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>IM讨论小组</Text>
@@ -30,7 +30,7 @@ class FriendListScreen extends React.Component {
                 </View>
                 <View style={styles.chatItem}>
                     <View style={{ height: 20, width: 20}}>
-                        <Icon name="md-people" size={20} color='rgb(222,87,66)'/>
+                        <Icon name="md-people" size={20} color='#1EA114'/>
                     </View>
                     <View style={{ marginHorizontal: 10 }}>
                         <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>Gru使用讨论</Text>
@@ -38,7 +38,7 @@ class FriendListScreen extends React.Component {
                 </View>
                 <View style={styles.chatItem}>
                     <View style={{ height: 20, width: 20}}>
-                        <Icon name="md-people" size={20} color='rgb(222,87,66)'/>
+                        <Icon name="md-people" size={20} color='#1EA114'/>
                     </View>
                     <View style={{ marginHorizontal: 10 }}>
                         <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>测试群组</Text>
@@ -48,7 +48,7 @@ class FriendListScreen extends React.Component {
 
                 <View style={styles.chatItem}>
                     <View style={{ height: 20, width: 20}}>
-                        <Icon name="md-person" size={20} color='rgb(222,87,66)'/>
+                        <Icon name="md-person" size={20} color='#1EA114'/>
                     </View>
                     <View style={{ marginHorizontal: 10 }}>
                         <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>sumory.wu</Text>
@@ -56,7 +56,7 @@ class FriendListScreen extends React.Component {
                 </View>
                 <View style={styles.chatItem}>
                     <View style={{ height: 20, width: 20}}>
-                        <Icon name="md-person" size={20} color='rgb(222,87,66)'/>
+                        <Icon name="md-person" size={20} color='#1EA114'/>
                     </View>
                     <View style={{ marginHorizontal: 10 }}>
                         <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>felix</Text>
@@ -64,7 +64,7 @@ class FriendListScreen extends React.Component {
                 </View>
                 <View style={styles.chatItem}>
                     <View style={{ height: 20, width: 20}}>
-                        <Icon name="md-person" size={20} color='rgb(222,87,66)'/>
+                        <Icon name="md-person" size={20} color='#1EA114'/>
                     </View>
                     <View style={{ marginHorizontal: 10 }}>
                         <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>sunny</Text>
@@ -72,7 +72,7 @@ class FriendListScreen extends React.Component {
                 </View>
                 <View style={styles.chatItem}>
                     <View style={{ height: 20, width: 20}}>
-                        <Icon name="md-person" size={20} color='rgb(222,87,66)'/>
+                        <Icon name="md-person" size={20} color='#1EA114'/>
                     </View>
                     <View style={{ marginHorizontal: 10 }}>
                         <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>bruce</Text>
@@ -80,7 +80,7 @@ class FriendListScreen extends React.Component {
                 </View>
                 <View style={styles.chatItem}>
                     <View style={{ height: 20, width: 20}}>
-                        <Icon name="md-person" size={20} color='rgb(222,87,66)'/>
+                        <Icon name="md-person" size={20} color='#1EA114'/>
                     </View>
                     <View style={{ marginHorizontal: 10 }}>
                         <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>bamzi</Text>
@@ -88,7 +88,7 @@ class FriendListScreen extends React.Component {
                 </View>
                 <View style={styles.chatItem}>
                     <View style={{ height: 20, width: 20}}>
-                        <Icon name="md-person" size={20} color='rgb(222,87,66)'/>
+                        <Icon name="md-person" size={20} color='#1EA114'/>
                     </View>
                     <View style={{ marginHorizontal: 10 }}>
                         <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>roy</Text>

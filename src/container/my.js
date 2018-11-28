@@ -10,14 +10,6 @@ import { StyleSheet, View, Text, ListView, Image } from 'react-native';
 import CoverageCell from '../component/coverageCell';
 import { getMetaData } from '../api/index';
 
-
-
-
-
-
-
-
-
 class AboutMyScreen extends React.Component {
     render() {
         return (

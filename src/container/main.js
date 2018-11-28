@@ -77,11 +77,7 @@ export default class MainContainer extends Component {
 
     return (
       <View style={styles.container}>
-
-
-
         <View style={styles.chatlist}>
-
           <View style={{ flex: 1 }}>
             <ListView style={{ flex: 1 }} dataSource={this.state.dataSource} renderRow={this.renderMover.bind(this)} />
           </View>
