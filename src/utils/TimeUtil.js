@@ -20,11 +20,12 @@ function format(date, fmt) {
   }
   
   function formatChatTime(timestamp) {
-    return format(new Date(timestamp * 1000), 'MM月dd日 hh:mm');
+    var ts=Math.round(timestamp/1000).toString()
+    return format(new Date(ts * 1000), 'MM月dd日 hh:mm');
   }
   
   function currentTime() {
-    return Date.parse(new Date()) / 1000;
+    return Date.parse(new Date());
   }
   
   module.exports = {

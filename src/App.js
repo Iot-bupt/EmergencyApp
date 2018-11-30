@@ -71,6 +71,7 @@ const AppNavigator = createStackNavigator({
 const navReducer = createNavigationReducer(AppNavigator);
 const appReducer = combineReducers({
   nav: navReducer,
+  chat:reducer
 });
 
 const middleware = createReactNavigationReduxMiddleware(

@@ -28,11 +28,22 @@ class ChatroomPage extends Component {
     }
 
     render() {
+        const {chat} =this.props
+        const chatWithId = this.props.navigation.getParam('chatWithId', 0)  //@param chatWithId:聊天对象Id
+
+        //Redux统一管理聊天信息。所以在每个聊天页面都需要整理出当前聊天对象的信息
+        var mychatMessages=[]
+        chat.messages.map (function(msg,index){
+            if(msg.fromId===chatWithId||msg.toUserId===chatWithId){
+                mychatMessages.push(msg)
+            }
+        })
+
         return (
             <View style={styles.container}>
                 <FlatList
                     ref="flatList"
-                    data={this.state.messages}
+                    data={mychatMessages}
                     renderItem={this.renderItem}
                     keyExtractor={this._keyExtractor}
                     extraData={this.state}
@@ -68,18 +79,24 @@ class ChatroomPage extends Component {
         //通过Redux管理socket
         this.props.actions.sendMessage(JSON.stringify(msg))
 
-        this.concatMessage({
-            createTime: TimeUtils.currentTime(),
-            fromUserId: fromUserId,
-            toUserId: toUserId,
-            content: this.state.inputMsg
-        })
+        // this.concatMessage({
+        //     createTime: TimeUtils.currentTime(),
+        //     fromUserId: fromUserId,
+        //     toUserId: toUserId,
+        //     content: this.state.inputMsg
+        // })
+        this.props.actions.concatMessageWhenSend({
+                createTime: TimeUtils.currentTime(),
+                fromUserId: fromUserId,
+                toUserId: toUserId,
+                content: this.state.inputMsg
+            })
 
         // 清空TextInput
         this.setState({ inputMsg: '' })
     }
 
-    //将本条消息添加到会话中
+    //本函数已弃用。将本条消息添加到会话中
     concatMessage(message) {
         //@TODO 将本条消息添加到首页会话列表中
         // ConversationUtil.addMessage(message, () => {
@@ -87,10 +104,14 @@ class ChatroomPage extends Component {
         //     CountEmitter.emit('notifyConversationListRefresh')
         // })
 
-        //将本条消息添加到会话中
+        //将本条消息添加到会话中,通过redux统一管理消息
+        // let msgs = this.props.chat.messages
+        // msgs.push(message)
+
+        //将本条消息添加到会话中,state改变页面自动刷新
         let msgs = this.state.messages
         msgs.push(message)
-        this.setState({ messages: msgs })
+        this.setState({ messages: msgs }) 
     }
 
     _keyExtractor = (item, index) => '#'+index
@@ -107,7 +128,14 @@ class ChatroomPage extends Component {
 
     //FlatList渲染接受的文本消息
     renderReceivedTextMsg(item) {
-        console.log('welcome')
+        return (
+            <View style={{ flexDirection: 'column', alignItems: 'flex-start', marginTop: 15, marginLeft: 10 }}>
+                <Text style={listItemStyle.time}>{TimeUtils.formatChatTime(parseInt(item.item.createTime))}</Text>
+                <View style={{ marginTop: 5, height: 40, borderRadius: 5, backgroundColor: 'rgb(140,204,223)', paddingHorizontal: 10 }}>
+                    <Text style={{ lineHeight: 40 }}>{item.item.content}</Text>
+                </View>
+            </View>
+        )
     }
 
     //FlatList渲染发送的文本消息
