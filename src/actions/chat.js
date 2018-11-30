@@ -29,6 +29,9 @@ export function connectChat(authString) {
                 socket.emit('auth', authString)
             }, 2000);
         });
+        socket.on('msg',function(msg){
+            console.log(msg)
+        })
     }
 }
 
