@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StyleSheet, Text, View, TouchableHighlight, TouchableOpacity, Button } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import Icon from "react-native-vector-icons/Ionicons";
 
 export default class CoverageCell extends Component {
@@ -49,16 +49,16 @@ export default class CoverageCell extends Component {
     // }
 
     render() {
-        const { title, cars,chatType } = this.props
+        const { title, cars, chatType, myProfile } = this.props
         return (
             <View style={{ flex: 1 }}>
                 <TouchableOpacity onPress={() => { this.detail(title) }}>
                     <View style={styles.chatBlock}>
-                        <View style={{ height: 20, width: 20}}>
-                            <Icon name="md-mail" size={20} color='rgb(173,185,191)'/>
+                        <View style={{ height: 20, width: 20 }}>
+                            <Icon name="md-mail" size={20} color='rgb(173,185,191)' />
                         </View>
                         <View style={{ marginHorizontal: 10, flex: 3 }}>
-                            <Text style={{ fontSize: 20, color: '#1a1a1a' }}>{title}</Text>
+                            <Text style={{ fontSize: 20, color: 'rgb(173,185,191)' }}>{title}</Text>
                         </View>
                         <View style={styles.tip}>
                             <Text style={styles.tipText}>3</Text>
@@ -69,20 +69,21 @@ export default class CoverageCell extends Component {
                 {/* {this.state.isShow ? <View>{this.isShowText()}</View> : <View></View>} */}
                 {this.state.isShow ? <View>{
                     cars.map((car, index) =>
-                        <TouchableOpacity key={index} onPress={() =>{
+                        <TouchableOpacity key={index} onPress={() => {
                             this.props.navigation.navigate('Chatroom', {
                                 chatType: chatType,
                                 chatWithId: cars[index].id,
                                 showName: cars[index].name,
+                                myProfile: myProfile,
                             })
                         }
                         }>
                             <View style={styles.chatItem}>
-                                <View style={{ height: 20, width: 20}}>
-                                    <Icon name="md-radio-button-off" size={20} color='rgb(222,87,66)'/>
+                                <View style={{ height: 20, width: 20 }}>
+                                    <Icon name="md-radio-button-off" size={20} color='rgb(222,87,66)' />
                                 </View>
                                 <View style={{ marginHorizontal: 10 }}>
-                                    <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>{cars[index].name}</Text>
+                                    <Text style={{ fontSize: 20, color: 'rgb(143,163,174)' }}>{cars[index].name}</Text>
                                 </View>
                             </View>
                         </TouchableOpacity>
@@ -102,9 +103,8 @@ const styles = StyleSheet.create({
         paddingVertical: 20,
         height: 60,
         alignItems: 'center',
-        borderBottomWidth: 1,
-        borderBottomColor: '#cccccc'
-
+        borderBottomWidth:1,
+        borderBottomColor:'#cccccc',
     },
     tip: {
         height: 20,
@@ -119,10 +119,10 @@ const styles = StyleSheet.create({
     },
     chatItem: {
         flexDirection: 'row',
-        alignItems:'center',
-        backgroundColor: '#ffffff',//好友列表全部
-        borderBottomWidth: 1,
-        borderBottomColor: '#cccccc',
+        alignItems: 'center',
+        backgroundColor: '#ffffff', //好友列表全部
+        borderBottomWidth:1,
+        borderBottomColor:'#cccccc',
         height: 50,
         paddingHorizontal: 25,
         paddingVertical: 10

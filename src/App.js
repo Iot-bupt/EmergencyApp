@@ -1,14 +1,23 @@
 import React, { Component }  from 'react'
 import {createBottomTabNavigator, createAppContainer,createStackNavigator} from 'react-navigation'
-import MainContainer from './container/main'
-import ChatroomContainer from './container/chatroom'
-import AboutMy from './container/my'
-import FriendList from './container/friendList'
+import MainContainer from './containers/main'
+import ChatroomContainer from './containers/chatroom'
+import AboutMy from './containers/my'
+import FriendList from './containers/friendList'
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { createStore, applyMiddleware,combineReducers } from 'redux';
+import thunkMiddleware from 'redux-thunk';
+import { Provider,connect } from 'react-redux';
+import reducer from '../src/reducers';
+import {
+  reduxifyNavigator,
+  createReactNavigationReduxMiddleware,
+  createNavigationReducer,
+} from 'react-navigation-redux-helpers';
 
 
 
-
+//配置navigator
 const ChatStackNavigator = createBottomTabNavigator({
     消息: { screen: MainContainer },
     通讯录: { screen: FriendList },
@@ -39,10 +48,7 @@ const ChatStackNavigator = createBottomTabNavigator({
 
 
     });
-
-
-
-const RootStack = createStackNavigator({
+const AppNavigator = createStackNavigator({
 
   Home: ChatStackNavigator,
   Chatroom: ChatroomContainer,
@@ -60,8 +66,34 @@ const RootStack = createStackNavigator({
     }
 );
 
+
+//React-navigation整合Redux
+const navReducer = createNavigationReducer(AppNavigator);
+const appReducer = combineReducers({
+  nav: navReducer,
+});
+
+const middleware = createReactNavigationReduxMiddleware(
+  "root",
+  state => state.nav,
+);
+
+const AppNav = reduxifyNavigator(AppNavigator, "root");
+const mapStateToProps = (state) => ({
+  state: state.nav,
+});
+const AppWithNavigationState = connect(mapStateToProps)(AppNav);
+const store = createStore(
+  appReducer,
+  applyMiddleware(middleware,thunkMiddleware),
+);
+
 export default class App extends Component {
   render() {
-    return <RootStack />;
+    return (
+      <Provider store={store}>
+        <AppWithNavigationState />
+      </Provider>
+    );
   }
 }
