@@ -28,9 +28,15 @@ export function connectChat(authString) {
                 console.log('auth ok.')
                 socket.emit('auth', authString)
             }, 2000);
+
+            // //群组接受消息测试
+            // var msg={"id":0,"createTime":1445676996823,"fromId":202,"msgType":1,"target":{"id":"160","type":-1},"content":"this is a message__1__2","expireTime":0}
+            // dispatch(receiveMsg(msg))
+            // var msg={"id":0,"createTime":1445676996823,"fromId":204,"msgType":1,"target":{"id":"190","type":-1},"content":"this is a message__3__3","expireTime":0}
+            // dispatch(receiveMsg(msg))
         });
         socket.on('msg',function(msg){
-            //console.log(msg)
+            console.log(msg)
             dispatch(receiveMsg(msg))
         })
     }
