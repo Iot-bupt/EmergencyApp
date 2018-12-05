@@ -29,13 +29,16 @@ class PublicChatroomPage extends Component {
     render() {
         const { chat } = this.props
         var chatWithId = this.chatWithId
+        var myId = this.myProfile.id
 
         //Redux统一管理聊天信息。所以在每个聊天页面都需要整理出当前聊天群组的信息
         var mychatMessages = []
         chat.messages.map(function (item, index) {
             if (item.msgType === 1) { //判断是群聊
-                if (item.toUserId == chatWithId || (item.target && item.target.id == chatWithId)) { //判断接收&发送的消息属于当前群组
-                    mychatMessages.push(item)
+                if (item.fromId !== myId) { //@bug 多聊发送信息时，后台会发一条广播。因此加一层判断
+                    if (item.toUserId == chatWithId || (item.target && item.target.id == chatWithId)) { //判断接收&发送的消息属于当前群组
+                        mychatMessages.push(item)
+                    }
                 }
             }
         })
