@@ -56,7 +56,7 @@ class SingleChatroomPage extends Component {
                         </View>
                         <View style={styles.sendBtn}>
                             <TouchableOpacity onPress={() => { this.sendMessage(this.myProfile.id, this.chatWithId) }}>
-                                <Text style={{ color: 'white', height: 30, alignItems: 'center', lineHeight: 40 }} >Send</Text>
+                                <Text style={{ color: 'white', height: 30, alignItems: 'center', lineHeight: 40 }} >发送</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

@@ -7,6 +7,7 @@
 
 import React from 'react';
 import { StyleSheet, View, Text, ListView, Image } from 'react-native';
+import Icon from "react-native-vector-icons/Ionicons";
 import CoverageCell from '../components/coverageCell';
 import { getMetaData } from '../api/index';
 
@@ -15,7 +16,6 @@ class AboutMyScreen extends React.Component {
         return (
 
             <View style={styles.container}>
-
                 <View style={styles.profile}>
                     <View style={{ height: 100, margin: 10, flex: 1, flexDirection: 'row' }}>
                         <Image style={{ height: 70, width: 70, borderRadius: 35, backgroundColor: '#dcdcdc', paddingVertical: 3 }} source={require('../image/user2-128x128.jpg')} />
@@ -33,6 +33,19 @@ class AboutMyScreen extends React.Component {
                         </View>
                     </View>
                 </View>
+                <View style={styles.setting}>
+                    <View style={{ height: 20, width: 20}}>
+                        <Icon name="ios-settings" size={20} color='#0A60FE'/>
+                    </View>
+                    <View style={{ marginHorizontal: 10 }}>
+                        <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>设置</Text>
+                    </View>
+                </View>
+
+
+
+
+
 
 
             </View>
@@ -52,6 +65,19 @@ var styles = StyleSheet.create({
         //borderWidth: 1,
         backgroundColor: '#ffffff',
     },
+    setting: {
+        marginTop: 20,
+        flexDirection: 'row',
+        alignItems:'center',
+        backgroundColor: '#ffffff',//好友列表全部
+
+        height: 40,
+        paddingHorizontal: 25,
+        paddingVertical: 10
+    },
+
+
+
 });
 
 export default AboutMyScreen;
