@@ -51,6 +51,6 @@ export function sendMessage(msg) {
 
 export function concatMessageWhenSend(msg){
     return dispatch => {
-    dispatch(receiveMsg(msg))
-}
+        dispatch(receiveMsg(msg))
+    }
 }

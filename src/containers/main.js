@@ -13,7 +13,7 @@ import { getMetaData, genToken } from '../api/index';
 import './setUserAgent.js'
 //import io from '../utils/socket.io/socket.io';
 import CountEmitter from '../event/countEmitter'
-import { chatActions } from '../actions/index'
+import { chatActions,loginActions } from '../actions/index'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
@@ -95,7 +95,8 @@ class MainContainer extends Component {
       token1: token1,
       token2: token2
     })
-    actions.connectChat(authString)
+    actions.connectChat(authString) // redux管理socket连接
+    actions.setMyProfile(_this.data.myself) // redux管理全局用户信息
   }
 
   componentWillMount() {
@@ -144,7 +145,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({ ...chatActions }, dispatch)
+    actions: bindActionCreators({ ...chatActions,...loginActions }, dispatch)
   }
 }
 

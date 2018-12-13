@@ -10,9 +10,15 @@ import { StyleSheet, View, Text, ListView, Image } from 'react-native';
 import Icon from "react-native-vector-icons/Ionicons";
 import CoverageCell from '../components/coverageCell';
 import { getMetaData } from '../api/index';
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { loginActions } from '../actions/index'
 
 class AboutMyScreen extends React.Component {
+
     render() {
+    const { profile } = this.props
+
         return (
 
             <View style={styles.container}>
@@ -21,7 +27,7 @@ class AboutMyScreen extends React.Component {
                         <Image style={{ height: 70, width: 70, borderRadius: 35, backgroundColor: '#dcdcdc', paddingVertical: 3 }} source={require('../image/user2-128x128.jpg')} />
                         <View style={{ flex: 1, marginHorizontal: 15, paddingTop: 5, justifyContent: 'space-around' }}>
                             <View>
-                                <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#cccccc' }}>mary</Text>
+                                <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#cccccc' }}>{profile.name}</Text>
                             </View>
                             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                                 <View style={{ backgroundColor: '#1EA114', borderRadius: 7, height: 14, width: 14 }}>
@@ -41,13 +47,6 @@ class AboutMyScreen extends React.Component {
                         <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>设置</Text>
                     </View>
                 </View>
-
-
-
-
-
-
-
             </View>
         );
     }
@@ -80,4 +79,20 @@ var styles = StyleSheet.create({
 
 });
 
-export default AboutMyScreen;
+
+function mapStateToProps(state) {
+    return {
+        profile: state.chat.profile
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        actions: bindActionCreators({ ...loginActions }, dispatch)
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AboutMyScreen)
+
+
+//export default AboutMyScreen;
