@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, FlatList } from 'react-native'
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, FlatList ,} from 'react-native'
 import CountEmitter from '../event/countEmitter';
 import TimeUtils from '../utils/TimeUtil'
 import { chatActions } from '../actions/index'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import Icon from "react-native-vector-icons/Ionicons";
+
 
 class SingleChatroomPage extends Component {
     static navigationOptions = ({ navigation }) => ({
@@ -53,6 +55,19 @@ class SingleChatroomPage extends Component {
                         <View style={{ flex: 4, borderStyle: 'solid', borderColor: 'rgb(203,205,208)', borderWidth: 1 }}>
                             <TextInput value={this.state.inputMsg} onChangeText={(inputMsg) => this.setState({ inputMsg })} />
                             {/* onChangeText监听TextInput组件值的变化，并与state绑定 */}
+                        </View>
+                        <View style={styles.sendFile}>
+
+                            <TouchableOpacity
+                                onPress={() => {
+                                    console.log('文件选择');
+                                    //this.selectImages()
+                                }}
+                            >
+                                <Text style={{ color: '#666666',lineHeight: 40 }} >
+                                    <Icon name="ios-save" size={25}/>
+                                </Text>
+                            </TouchableOpacity>
                         </View>
                         <View style={styles.sendBtn}>
                             <TouchableOpacity onPress={() => { this.sendMessage(this.myProfile.id, this.chatWithId) }}>
@@ -186,8 +201,16 @@ const styles = StyleSheet.create({
         margin: 10,
         flexDirection: 'row'
     },
+    sendFile: {
+        flex: 0.5,
+        alignItems: 'center',
+        borderBottomWidth: 1,
+        borderBottomColor: '#cccccc',
+        borderTopWidth: 1,
+        borderTopColor: '#cccccc',
+    },
     sendBtn: {
-        flex: 1,
+        flex: 0.8,
         height: 40,
         backgroundColor: 'rgb(80,140,184)',
         textAlign: 'center',
