@@ -1,12 +1,15 @@
 import React, { Component } from 'react'
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, FlatList ,} from 'react-native'
+import { Dimensions, StyleSheet, View, Text, TextInput, TouchableOpacity, FlatList, Image } from 'react-native'
 import CountEmitter from '../event/countEmitter';
 import TimeUtils from '../utils/TimeUtil'
 import { chatActions } from '../actions/index'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import Icon from "react-native-vector-icons/Ionicons";
+import ImagePicker from 'react-native-image-crop-picker';
+import MoreView from '../components/moreView';
 
+const { width } = Dimensions.get('window')
 
 class SingleChatroomPage extends Component {
     static navigationOptions = ({ navigation }) => ({
@@ -17,9 +20,12 @@ class SingleChatroomPage extends Component {
         super(props);
         this.state = {
             inputMsg: '',
-            messages: []
+            messages: [],
+            showMoreView: false
         };
-        this.sendMessage = this.sendMessage.bind(this)
+        this.sendTextMessage = this.sendTextMessage.bind(this)
+        this.sendImageMessage = this.sendImageMessage.bind(this)
+        this.handlePress = this.handlePress.bind(this)
         //路由跳转时携带的参数
         this.myProfile = this.props.navigation.getParam('myProfile', {}) //@param myProfile:个人信息
         this.chatType = this.props.navigation.getParam('chatType', 'unknown') //@param chatType:聊天类型
@@ -41,6 +47,22 @@ class SingleChatroomPage extends Component {
             }
         })
 
+        //工具栏
+        var moreView = []
+        if (this.state.showMoreView) {
+            moreView.push(
+                <View key={"more-view-key"}>
+                    <View style={{ width: width, height: 1, backgroundColor: '#D3D3D3' }} />
+                    <View style={{ height: 100 }}>
+                        {/* @TODO 绑定逻辑 */}
+                        <MoreView
+                            sendImageMessage={this.sendImageMessage}
+                        />
+                    </View>
+                </View>
+            )
+        }
+
         return (
             <View style={styles.container}>
                 <FlatList
@@ -52,36 +74,41 @@ class SingleChatroomPage extends Component {
                 />
                 <View style={styles.footer}>
                     <View style={styles.textInput}>
-                        <View style={{ flex: 4, borderStyle: 'solid', borderColor: 'rgb(203,205,208)', borderWidth: 1 }}>
+                        <View style={{ flex: 4, height: 40, borderStyle: 'solid', borderColor: 'rgb(203,205,208)', borderWidth: 1 }}>
                             <TextInput value={this.state.inputMsg} onChangeText={(inputMsg) => this.setState({ inputMsg })} />
                             {/* onChangeText监听TextInput组件值的变化，并与state绑定 */}
                         </View>
-                        <View style={styles.sendFile}>
-
-                            <TouchableOpacity
-                                onPress={() => {
-                                    console.log('文件选择');
-                                    //this.selectImages()
-                                }}
-                            >
-                                <Text style={{ color: '#666666',lineHeight: 40 }} >
-                                    <Icon name="ios-save" size={25}/>
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
                         <View style={styles.sendBtn}>
-                            <TouchableOpacity onPress={() => { this.sendMessage(this.myProfile.id, this.chatWithId) }}>
+                            <TouchableOpacity onPress={() => { this.sendTextMessage(this.myProfile.id, this.chatWithId) }}>
                                 <Text style={{ color: 'white', height: 30, alignItems: 'center', lineHeight: 40 }} >发送</Text>
                             </TouchableOpacity>
                         </View>
+                        <TouchableOpacity activeOpacity={0.5} onPress={() => { this.handlePress() }}>
+                            <Image style={[styles.icon, { marginLeft: 10 }]} source={require('../images/ic_chat_add.png')} />
+                        </TouchableOpacity>
                     </View>
+                    {moreView}
                 </View>
             </View>
         )
     }
+    //展示隐藏工具栏
+    handlePress() {
+        this.setState({ showMoreView: !this.state.showMoreView })
+    }
+
+    //发送图片
+    sendImageMessage(image) {
+        console.log("此处开始发送图片逻辑")
+    }
 
     //发送socket
-    sendMessage(fromUserId, toUserId) {
+    sendTextMessage(fromUserId, toUserId) {
+        if(this.state.inputMsg === ''){
+            //@TODO 用toast插件替换
+            console.log('输入不能为空')
+            return
+        }
         //向socket发送数据
         var msg = {
             type: 0, //1 广播，0 单播给指定target
@@ -189,25 +216,23 @@ const styles = StyleSheet.create({
     },
     footer: {
         flex: 1,
-        height: 60,
         position: 'absolute',
         bottom: 0,
         left: 0,
         right: 0,
         backgroundColor: 'white',
+        alignItems: 'center'
+    },
+    icon: {
+        width: 30,
+        height: 30,
     },
     textInput: {
         flex: 1,
+        height: 40,
         margin: 10,
-        flexDirection: 'row'
-    },
-    sendFile: {
-        flex: 0.5,
-        alignItems: 'center',
-        borderBottomWidth: 1,
-        borderBottomColor: '#cccccc',
-        borderTopWidth: 1,
-        borderTopColor: '#cccccc',
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     sendBtn: {
         flex: 0.8,

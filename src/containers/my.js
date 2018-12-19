@@ -24,7 +24,7 @@ class AboutMyScreen extends React.Component {
             <View style={styles.container}>
                 <View style={styles.profile}>
                     <View style={{ height: 100, margin: 10, flex: 1, flexDirection: 'row' }}>
-                        <Image style={{ height: 70, width: 70, borderRadius: 35, backgroundColor: '#dcdcdc', paddingVertical: 3 }} source={require('../image/user2-128x128.jpg')} />
+                        <Image style={{ height: 70, width: 70, borderRadius: 35, backgroundColor: '#dcdcdc', paddingVertical: 3 }} source={require('../images/user2-128x128.jpg')} />
                         <View style={{ flex: 1, marginHorizontal: 15, paddingTop: 5, justifyContent: 'space-around' }}>
                             <View>
                                 <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#cccccc' }}>{profile.name}</Text>
