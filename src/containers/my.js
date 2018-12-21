@@ -41,10 +41,18 @@ class AboutMyScreen extends React.Component {
                 </View>
                 <View style={styles.setting}>
                     <View style={{ height: 20, width: 20}}>
-                        <Icon name="ios-settings" size={20} color='#0A60FE'/>
+                        <Icon name="md-clipboard" size={20} color='#0A60FE'/>
                     </View>
                     <View style={{ marginHorizontal: 10 }}>
-                        <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>设置</Text>
+                        <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>巡检</Text>
+                    </View>
+                </View>
+                <View style={styles.setting}>
+                    <View style={{ height: 20, width: 20}}>
+                        <Icon name="ios-pin" size={20} color='#0A60FE'/>
+                    </View>
+                    <View style={{ marginHorizontal: 10 }}>
+                        <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>定位</Text>
                     </View>
                 </View>
             </View>
