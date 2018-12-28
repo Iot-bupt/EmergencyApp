@@ -3,10 +3,8 @@
  *
  * 我的页面
  */
-
-
 import React from 'react';
-import { StyleSheet, View, Text, ListView, Image } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
 import Icon from "react-native-vector-icons/Ionicons";
 import CoverageCell from '../components/coverageCell';
 import { getMetaData } from '../api/index';
@@ -15,10 +13,10 @@ import { bindActionCreators } from 'redux'
 import { loginActions } from '../actions/index'
 
 class AboutMyScreen extends React.Component {
-
+   
     render() {
     const { profile } = this.props
-
+    
         return (
 
             <View style={styles.container}>
@@ -39,6 +37,8 @@ class AboutMyScreen extends React.Component {
                         </View>
                     </View>
                 </View>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('Inspection')}
+                    >
                 <View style={styles.setting}>
                     <View style={{ height: 20, width: 20}}>
                         <Icon name="md-clipboard" size={20} color='#0A60FE'/>
@@ -47,6 +47,8 @@ class AboutMyScreen extends React.Component {
                         <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>巡检</Text>
                     </View>
                 </View>
+                </TouchableOpacity>
+                
                 <View style={styles.setting}>
                     <View style={{ height: 20, width: 20}}>
                         <Icon name="ios-pin" size={20} color='#0A60FE'/>
@@ -68,15 +70,14 @@ var styles = StyleSheet.create({
     },
     profile: {
         height: 100,
-        //borderColor: '#cccccc',
-        //borderWidth: 1,
+        
         backgroundColor: '#ffffff',
     },
     setting: {
         marginTop: 20,
         flexDirection: 'row',
         alignItems:'center',
-        backgroundColor: '#ffffff',//好友列表全部
+        backgroundColor: '#ffffff',
 
         height: 40,
         paddingHorizontal: 25,

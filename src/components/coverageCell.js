@@ -15,7 +15,7 @@ export default class CoverageCell extends Component {
         this.setState({
             isShow: !this.state.isShow
         });
-        this.props.detail(title);
+        this.props.detail(title)
     }
 
     static defaultProps = {
@@ -23,30 +23,8 @@ export default class CoverageCell extends Component {
         cars: []
     }
 
-    /** for是ES5语法，而且此方法无法获得每一行的索引
-     * 故改用map */
-
-    // isShowText() {
-    //     const { title, cars } = this.props
-    //     var allChild = []
-    //     for (var i = 0; i < cars.length; i++) {
-    //         allChild.push(
-    //             <TouchableOpacity onPress={() =>
-    //                 this.props.navigation.navigate('Chatroom', {
-    //                     name: i,
-    //                 })
-    //             }>
-    //                 <View style={styles.chatItem}>
-    //                     <View style={{ height: 20, width: 20, backgroundColor: 'red' }}></View>
-    //                     <View style={{ marginHorizontal: 10 }}>
-    //                         <Text style={{ fontSize: 20, color: 'rgb(143,163,174)' }}>{cars[i].name}</Text>
-    //                     </View>
-    //                 </View>
-    //             </TouchableOpacity>
-    //         )
-    //     }
-    //     return allChild
-    // }
+   
+    
 
     render() {
         const { title, cars, chatType, myProfile, userMap } = this.props

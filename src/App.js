@@ -3,6 +3,7 @@ import { createBottomTabNavigator, createAppContainer, createStackNavigator } fr
 import MainContainer from './containers/main'
 import SingleChatroomContainer from './containers/SingleChatroom'
 import PublicChatroomContainer from './containers/PublicChatroom'
+import InspectionContainer from './containers/Inspection'
 import AboutMy from './containers/my'
 import FriendList from './containers/friendList'
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -36,8 +37,7 @@ const ChatStackNavigator = createBottomTabNavigator({
                     iconName = `ios-person${focused ? '' : ''}`;
                 }
 
-                // 在此处可以返回任何组件！
-                // 我们通常使用react-native-vector-icons中的图标组件
+                
                 return <Ionicons name={iconName} size={25} color={tintColor} />;
             },
         }),
@@ -53,7 +53,8 @@ const AppNavigator = createStackNavigator({
 
     Home: ChatStackNavigator,
     SingleChatroom: SingleChatroomContainer,
-    PublicChatroom: PublicChatroomContainer
+    PublicChatroom: PublicChatroomContainer,
+    Inspection: InspectionContainer,
 }, {
         navigationOptions: {
             title: '应急指挥',
