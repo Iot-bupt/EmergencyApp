@@ -8,13 +8,9 @@ import {
   TextInput,
   ListView,
   Platform,
+  Button
 } from 'react-native';
-
 import io from '../utils/socket.io/socket.io'; // 旧版socket依赖
-
-//const socket = io.connect('https://react-native-webrtc.herokuapp.com', { transports: ['websocket'] });  // 原项目信令服务器
-const socket = io.connect('http://10.112.17.185:31001', { transports: ['websocket'] }); // 实验室服务器java后台
-
 import {
   RTCPeerConnection,
   RTCMediaStream,
@@ -68,176 +64,6 @@ function getLocalStream(isFront, callback) {
   }, logError);
 }
 
-// 创建或加入房间
-function join(roomID) {
-  socket.emit('join', roomID, function (res) {
-    var socketIds = res.data
-    //var socketIds = res
-    console.log('join', socketIds);
-    for (const i in socketIds) {
-      const socketId = socketIds[i];
-      //console.log(socketId)
-      createPC(socketId, true);
-    }
-  });
-}
-
-function createPC(socketId, isOffer) {
-  const pc = new RTCPeerConnection(configuration);
-  pcPeers[socketId] = pc;
-
-  pc.onicecandidate = function (event) {
-    console.log('onicecandidate', event.candidate);
-    if (event.candidate) {
-      //console.log(socketId,event.candidate)
-      socket.emit('exchange', JSON.stringify({ 'to': socketId, 'candidate': event.candidate }));
-      //socket.emit('exchange', { 'to': socketId, 'candidate': event.candidate });
-    }
-  };
-
-  function createOffer() {
-    pc.createOffer(function (desc) {
-      console.log('createOffer', desc);
-      pc.setLocalDescription(desc, function () {
-        console.log('setLocalDescription', pc.localDescription);
-        socket.emit('exchange', JSON.stringify({ 'to': socketId, 'sdp': pc.localDescription }));
-        //socket.emit('exchange', { 'to': socketId, 'sdp': pc.localDescription });
-      }, logError);
-    }, logError);
-  }
-
-  pc.onnegotiationneeded = function () {
-    console.log('onnegotiationneeded');
-    if (isOffer) {
-      createOffer();
-    }
-  }
-
-  pc.oniceconnectionstatechange = function (event) {
-    console.log('oniceconnectionstatechange', event.target.iceConnectionState);
-    if (event.target.iceConnectionState === 'completed') {
-      setTimeout(() => {
-        getStats();
-      }, 1000);
-    }
-    if (event.target.iceConnectionState === 'connected') {
-      createDataChannel();
-    }
-  };
-  pc.onsignalingstatechange = function (event) {
-    console.log('onsignalingstatechange', event.target.signalingState);
-  };
-
-  pc.onaddstream = function (event) {
-    console.log('onaddstream', event.stream);
-    container.setState({ info: 'One peer join!' });
-
-    const remoteList = container.state.remoteList;
-    remoteList[socketId] = event.stream.toURL();
-    console.log(666)
-    console.log(event.stream.toURL())
-    container.setState({ remoteList: remoteList });
-  };
-  pc.onremovestream = function (event) {
-    console.log('onremovestream', event.stream);
-  };
-
-  pc.addStream(localStream);
-  function createDataChannel() {
-    if (pc.textDataChannel) {
-      return;
-    }
-    const dataChannel = pc.createDataChannel("text");
-
-    dataChannel.onerror = function (error) {
-      console.log("dataChannel.onerror", error);
-    };
-
-    dataChannel.onmessage = function (event) {
-      console.log("dataChannel.onmessage:", event.data);
-      container.receiveTextData({ user: socketId, message: event.data });
-    };
-
-    dataChannel.onopen = function () {
-      console.log('dataChannel.onopen');
-      container.setState({ textRoomConnected: true });
-    };
-
-    dataChannel.onclose = function () {
-      console.log("dataChannel.onclose");
-    };
-
-    pc.textDataChannel = dataChannel;
-  }
-  return pc;
-}
-
-function exchange(data) {
-  const fromId = data.from;
-  console.log('fromId',fromId)
-  let pc;
-  if (fromId in pcPeers) {
-    pc = pcPeers[fromId];
-  } else {
-    pc = createPC(fromId, false);
-  }
-
-  if (data.sdp) {
-    console.log('exchange sdp', data);
-    pc.setRemoteDescription(new RTCSessionDescription(data.sdp), function () {
-      if (pc.remoteDescription.type == "offer")
-        pc.createAnswer(function (desc) {
-          console.log('createAnswer', desc);
-          pc.setLocalDescription(desc, function () {
-            console.log('setLocalDescription', pc.localDescription);
-            socket.emit('exchange', JSON.stringify({ 'to': fromId, 'sdp': pc.localDescription }));
-          }, logError);
-        }, logError);
-    }, logError);
-  } else {
-    console.log('exchange candidate', data);
-    pc.addIceCandidate(new RTCIceCandidate(data.candidate));
-  }
-}
-
-function leave(socketId) {
-  console.log('leave', socketId);
-  const pc = pcPeers[socketId];
-  const viewIndex = pc.viewIndex;
-  pc.close();
-  delete pcPeers[socketId];
-
-  const remoteList = container.state.remoteList;
-  delete remoteList[socketId]
-  container.setState({ remoteList: remoteList });
-  container.setState({ info: 'One peer leave!' });
-}
-
-socket.on('exchange', function (data) {
-  exchange(data);
-});
-socket.on('leave', function (socketId) {
-  leave(socketId);
-});
-
-socket.on('connect', function (data) {
-  //alert('connect');
-  console.log('connect');
-  getLocalStream(true, function (stream) {
-    localStream = stream;
-    container.setState({ selfViewSrc: stream.toURL() });
-    container.setState({ status: 'ready', info: 'Please enter or create room ID' });
-  });
-});
-
-socket.on('disconnect',function(data){
-  console.log('disconnect',data)
-})
-
-function logError(error) {
-  console.log("logError", error);
-}
-
 function mapHash(hash, func) {
   const array = [];
   for (const key in hash) {
@@ -247,21 +73,18 @@ function mapHash(hash, func) {
   return array;
 }
 
-function getStats() {
-  const pc = pcPeers[Object.keys(pcPeers)[0]];
-  if (pc.getRemoteStreams()[0] && pc.getRemoteStreams()[0].getAudioTracks()[0]) {
-    const track = pc.getRemoteStreams()[0].getAudioTracks()[0];
-    console.log('track', track);
-    pc.getStats(track, function (report) {
-      console.log('getStats report', report);
-    }, logError);
-  }
+function logError(error) {
+  console.log("logError", error);
 }
 
 let container;
 
 
 export default class videochat extends Component {
+  static navigationOptions = () => ({
+    header: null // 隐藏标题栏：config must be a React component or null.
+  });
+
   constructor(props) {
     super(props)
 
@@ -276,6 +99,7 @@ export default class videochat extends Component {
       textRoomConnected: false,
       textRoomData: [],
       textRoomValue: '',
+      socket: {}
     }
 
     this._press = this._press.bind(this)
@@ -285,16 +109,205 @@ export default class videochat extends Component {
     this._renderTextRoom = this._renderTextRoom.bind(this)
   }
 
+
   componentDidMount() {
-    console.log(this)
+
     container = this
+    console.log('componentdidmount')
+
+    // const socket = io.connect('https://react-native-webrtc.herokuapp.com', { transports: ['websocket'] });  // 原项目信令服务器
+    const socket = io.connect('http://10.112.17.185:31001', { transports: ['websocket'] }); // 实验室服务器java后台
+
+    // @TODO bug：收到多次连接广播
+    socket.connect()
+    console.log(socket)
+
+    this.setState({ socket })
+
+    socket.on('exchange', (data) => {
+      this.exchange(data);
+    });
+    socket.on('leave', (socketId) => {
+      this.leave(socketId);
+    });
+    socket.on('connect', function (data) {
+      console.log('webrtc-socket connect');
+      getLocalStream(true, function (stream) {
+        localStream = stream;
+        container.setState({ selfViewSrc: stream.toURL() });
+        container.setState({ status: 'ready', info: 'Please enter or create room ID' });
+      });
+    });
+
+    socket.on('disconnect', function (data) {
+      console.log('disconnect', data)
+    })
+  }
+
+
+
+  // 创建或加入房间
+  join = (roomID) => { // ES6箭头函数直接实现bind
+    let socket = this.state.socket
+    socket.emit('join', roomID, (res) => {
+      var socketIds = res.data
+      //var socketIds = res
+      console.log('join', socketIds);
+      for (const i in socketIds) {
+        const socketId = socketIds[i];
+        //console.log(socketId)
+        this.createPC(socketId, true);
+      }
+    });
+  }
+
+  createPC = (socketId, isOffer) => {
+    const pc = new RTCPeerConnection(configuration);
+    let socket = this.state.socket
+    pcPeers[socketId] = pc;
+
+    pc.onicecandidate = function (event) {
+      console.log('onicecandidate', event.candidate);
+      if (event.candidate) {
+        socket.emit('exchange', JSON.stringify({ 'to': socketId, 'candidate': event.candidate }));
+      }
+    };
+
+    function createOffer() {
+      pc.createOffer(function (desc) {
+        console.log('createOffer', desc);
+        pc.setLocalDescription(desc, function () {
+          console.log('setLocalDescription', pc.localDescription);
+          socket.emit('exchange', JSON.stringify({ 'to': socketId, 'sdp': pc.localDescription }));
+        }, logError);
+      }, logError);
+    }
+
+    pc.onnegotiationneeded = function () {
+      console.log('onnegotiationneeded');
+      if (isOffer) {
+        createOffer();
+      }
+    }
+
+    pc.oniceconnectionstatechange = function (event) {
+      console.log('oniceconnectionstatechange', event.target.iceConnectionState);
+      if (event.target.iceConnectionState === 'completed') {
+        setTimeout(() => {
+          this.getStats();
+        }, 1000);
+      }
+      if (event.target.iceConnectionState === 'connected') {
+        createDataChannel();
+      }
+    };
+    pc.onsignalingstatechange = function (event) {
+      console.log('onsignalingstatechange', event.target.signalingState);
+    };
+
+    pc.onaddstream = function (event) {
+      console.log('onaddstream', event.stream);
+      container.setState({ info: 'One peer join!' });
+
+      const remoteList = container.state.remoteList;
+      remoteList[socketId] = event.stream.toURL();
+      console.log(666)
+      console.log(event.stream.toURL())
+      container.setState({ remoteList: remoteList });
+    };
+    pc.onremovestream = function (event) {
+      console.log('onremovestream', event.stream);
+    };
+
+    pc.addStream(localStream);
+    function createDataChannel() {
+      if (pc.textDataChannel) {
+        return;
+      }
+      const dataChannel = pc.createDataChannel("text");
+
+      dataChannel.onerror = function (error) {
+        console.log("dataChannel.onerror", error);
+      };
+
+      dataChannel.onmessage = function (event) {
+        console.log("dataChannel.onmessage:", event.data);
+        container.receiveTextData({ user: socketId, message: event.data });
+      };
+
+      dataChannel.onopen = function () {
+        console.log('dataChannel.onopen');
+        container.setState({ textRoomConnected: true });
+      };
+
+      dataChannel.onclose = function () {
+        console.log("dataChannel.onclose");
+      };
+
+      pc.textDataChannel = dataChannel;
+    }
+    return pc;
+  }
+
+  exchange = (data) => {
+    const fromId = data.from;
+    let socket = this.state.socket
+
+    console.log('fromId', fromId)
+    let pc;
+    if (fromId in pcPeers) {
+      pc = pcPeers[fromId];
+    } else {
+      pc = this.createPC(fromId, false);
+    }
+
+    if (data.sdp) {
+      console.log('exchange sdp', data);
+      pc.setRemoteDescription(new RTCSessionDescription(data.sdp), function () {
+        if (pc.remoteDescription.type == "offer")
+          pc.createAnswer(function (desc) {
+            console.log('createAnswer', desc);
+            pc.setLocalDescription(desc, () => {
+              // console.log('setLocalDescription', pc.localDescription);
+              socket.emit('exchange', JSON.stringify({ 'to': fromId, 'sdp': pc.localDescription }));
+            }, logError);
+          }, logError);
+      }, logError);
+    } else {
+      console.log('exchange candidate', data);
+      pc.addIceCandidate(new RTCIceCandidate(data.candidate));
+    }
+  }
+
+  leave = (socketId) => {
+    console.log('leave', socketId);
+    const pc = pcPeers[socketId];
+    const viewIndex = pc.viewIndex;
+    pc.close();
+    delete pcPeers[socketId];
+
+    const remoteList = container.state.remoteList;
+    delete remoteList[socketId]
+    container.setState({ remoteList: remoteList });
+    container.setState({ info: 'One peer leave!' });
+  }
+
+  getStats = () => {
+    const pc = pcPeers[Object.keys(pcPeers)[0]];
+    if (pc.getRemoteStreams()[0] && pc.getRemoteStreams()[0].getAudioTracks()[0]) {
+      const track = pc.getRemoteStreams()[0].getAudioTracks()[0];
+      console.log('track', track);
+      pc.getStats(track, function (report) {
+        console.log('getStats report', report);
+      }, logError);
+    }
   }
 
   _press(event) {
     console.log(this.state.roomID)
     this.refs.roomID.blur();
     this.setState({ status: 'connect', info: 'Connecting' });
-    join(this.state.roomID);
+    this.join(this.state.roomID);
   }
   _switchVideoType() {
     const isFront = !this.state.isFront;
@@ -352,6 +365,14 @@ export default class videochat extends Component {
       </View>
     );
   }
+
+  goBackToLastPage = () => {
+
+    this.state.socket.close()
+    console.log(this.state.socket)
+    this.props.navigation.goBack()
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -390,6 +411,7 @@ export default class videochat extends Component {
             return <RTCView key={index} streamURL={remote} style={styles.remoteView} />
           })
         }
+        <Button title='退出' onPress={() => { this.goBackToLastPage() }} />
       </View>
     );
   }

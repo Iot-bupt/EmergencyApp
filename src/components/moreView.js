@@ -88,7 +88,7 @@ class Cell extends Component {
     }
 
     toVideoChat() { // 路由到视频聊天页面
-        //this.props.navigation.navigate('VideoChat', {})
+        this.props.navigation.navigate('VideoChat', {})
     }
 }
 
