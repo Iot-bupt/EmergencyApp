@@ -6,18 +6,40 @@
 
 
 import React from 'react';
-import { StyleSheet, View, Text, ListView, Image } from 'react-native';
+import { StyleSheet, View, Text, ListView, Image, Switch } from 'react-native';
 import Icon from "react-native-vector-icons/Ionicons";
 import CoverageCell from '../components/coverageCell';
+import { getLongitudeAndLatitude } from '../utils/LocationUtil';
 import { getMetaData } from '../api/index';
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { loginActions } from '../actions/index'
 
 class AboutMyScreen extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            locationSwitchIsOn: false
+        }
+    }
 
     render() {
-    const { profile } = this.props
+        const { profile } = this.props
+        if (this.state.locationSwitchIsOn) {
+            console.log('Location switch on.')
+            this.timer = setInterval(
+                () => {
+                    getLongitudeAndLatitude().then((locationArr) => {
+                        console.log(locationArr)
+                    })
+                },//延时操作
+                1000       //延时时间
+            );
+        } else {
+            console.log('Location switch off.')
+            clearTimeout(this.timer)
+        }
 
         return (
 
@@ -40,19 +62,29 @@ class AboutMyScreen extends React.Component {
                     </View>
                 </View>
                 <View style={styles.setting}>
-                    <View style={{ height: 20, width: 20}}>
-                        <Icon name="md-clipboard" size={20} color='#0A60FE'/>
-                    </View>
-                    <View style={{ marginHorizontal: 10 }}>
-                        <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>巡检</Text>
+                    <View style={styles.settingItem}>
+                        <View style={{ height: 20, width: 20 }}>
+                            <Icon name="md-clipboard" size={20} color='#0A60FE' />
+                        </View>
+                        <View style={{ marginHorizontal: 10 }}>
+                            <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>巡检</Text>
+                        </View>
                     </View>
                 </View>
                 <View style={styles.setting}>
-                    <View style={{ height: 20, width: 20}}>
-                        <Icon name="ios-pin" size={20} color='#0A60FE'/>
+                    <View style={styles.settingItem}>
+                        <View style={{ height: 20, width: 20 }}>
+                            <Icon name="ios-pin" size={20} color='#0A60FE' />
+                        </View>
+                        <View style={{ marginHorizontal: 10 }}>
+                            <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>定位</Text>
+                        </View>
                     </View>
-                    <View style={{ marginHorizontal: 10 }}>
-                        <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>定位</Text>
+                    <View>
+                        <Switch
+                            onValueChange={(value) => this.setState({ locationSwitchIsOn: value })}
+                            style={{ marginBottom: 10, marginTop: 10 }}
+                            value={this.state.locationSwitchIsOn} />
                     </View>
                 </View>
             </View>
@@ -75,16 +107,19 @@ var styles = StyleSheet.create({
     setting: {
         marginTop: 20,
         flexDirection: 'row',
-        alignItems:'center',
+        alignItems: 'center',
+        justifyContent: 'space-between',
         backgroundColor: '#ffffff',//好友列表全部
-
         height: 40,
         paddingHorizontal: 25,
         paddingVertical: 10
     },
-
-
-
+    settingItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        height: 40,
+        paddingVertical: 10
+    }
 });
 
 
