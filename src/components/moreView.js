@@ -17,6 +17,10 @@ const iconTexts = [
 ];
 
 export default class MoreView extends Component {
+    constructor(props) {
+        super(props);
+    }
+
     render() {
         var page = [];
         for (var i = 0; i < 1; i++) {
@@ -29,6 +33,7 @@ export default class MoreView extends Component {
                         text={iconTexts[i * 4 + j]}
                         index={i * 4 + j}
                         sendImageMessage={this.props.sendImageMessage}
+                        navigation={this.props.navigation}
                     />
                 );
             }
@@ -64,6 +69,8 @@ class Cell extends Component {
             case 0:
                 this.chooseImage();
                 break;
+            case 3:
+                this.toVideoChat();
             default:
         }
     }
@@ -78,6 +85,10 @@ class Cell extends Component {
                 this.props.sendImageMessage(image);
             }
         });
+    }
+
+    toVideoChat() { // 路由到视频聊天页面
+        //this.props.navigation.navigate('VideoChat', {})
     }
 }
 

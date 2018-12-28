@@ -6,4 +6,5 @@ project(':react-native-gesture-handler').projectDir = new File(rootProject.proje
 include ':react-native-vector-icons'
 project(':react-native-vector-icons').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-vector-icons/android')
 
-include ':app'
+include ':app',':WebRTCModule'
+project(':WebRTCModule').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-webrtc/android')

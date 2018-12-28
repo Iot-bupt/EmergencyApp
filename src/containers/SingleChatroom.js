@@ -56,6 +56,7 @@ class SingleChatroomPage extends Component {
                     <View style={{ height: 100 }}>
                         {/* @TODO 绑定逻辑 */}
                         <MoreView
+                            navigation={this.props.navigation}
                             sendImageMessage={this.sendImageMessage}
                         />
                     </View>

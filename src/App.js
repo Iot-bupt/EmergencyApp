@@ -3,6 +3,7 @@ import { createBottomTabNavigator, createAppContainer, createStackNavigator } fr
 import MainContainer from './containers/main'
 import SingleChatroomContainer from './containers/SingleChatroom'
 import PublicChatroomContainer from './containers/PublicChatroom'
+//import VideoChatContainer from './containers/VideoChat'
 import AboutMy from './containers/my'
 import FriendList from './containers/friendList'
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -53,7 +54,8 @@ const AppNavigator = createStackNavigator({
 
     Home: ChatStackNavigator,
     SingleChatroom: SingleChatroomContainer,
-    PublicChatroom: PublicChatroomContainer
+    PublicChatroom: PublicChatroomContainer,
+    //VideoChat: VideoChatContainer //视频路由
 }, {
         navigationOptions: {
             title: '应急指挥',
