@@ -6,7 +6,7 @@
 
 
 import React from 'react';
-import { StyleSheet, View, Text, ListView, Image, Switch } from 'react-native';
+import { StyleSheet, View, Text, ListView, Image, Switch, Button } from 'react-native';
 import Icon from "react-native-vector-icons/Ionicons";
 import CoverageCell from '../components/coverageCell';
 import { getLongitudeAndLatitude } from '../utils/LocationUtil';
@@ -22,6 +22,10 @@ class AboutMyScreen extends React.Component {
         this.state = {
             locationSwitchIsOn: false
         }
+    }
+
+    LoginOut = () =>{
+        this.props.navigation.navigate('Login', {})
     }
 
     render() {
@@ -86,6 +90,9 @@ class AboutMyScreen extends React.Component {
                             style={{ marginBottom: 10, marginTop: 10 }}
                             value={this.state.locationSwitchIsOn} />
                     </View>
+                </View>
+                <View style={{marginTop:150}}>
+                    <Button title='退出登录' onPress={() => { this.LoginOut() }} />
                 </View>
             </View>
         );

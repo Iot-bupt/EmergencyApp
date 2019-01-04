@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { createBottomTabNavigator, createAppContainer, createStackNavigator } from 'react-navigation'
 import MainContainer from './containers/main'
+import LoginContainer from './containers/Login'
 import SingleChatroomContainer from './containers/SingleChatroom'
 import PublicChatroomContainer from './containers/PublicChatroom'
 import VideoChatContainer from './containers/VideoChat'
@@ -53,10 +54,12 @@ const ChatStackNavigator = createBottomTabNavigator({
 const AppNavigator = createStackNavigator({
 
     Home: ChatStackNavigator,
+    Login: LoginContainer,
     SingleChatroom: SingleChatroomContainer,
     PublicChatroom: PublicChatroomContainer,
     VideoChat: VideoChatContainer //视频路由
 }, {
+        initialRouteName: 'Login',
         navigationOptions: {
             title: '应急指挥',
             headerStyle: {
