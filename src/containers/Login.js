@@ -8,6 +8,7 @@ import {
 import Button from '../components/Button';
 import TextButton from '../components/TextButton';
 import TextField from '../components/TextField';
+import Toast from '@remobile/react-native-toast';
 // import request from '../utils/request';
 // import navigationUtil from '../utils/navigation';
 // import { saveToken } from '../utils/storage';
@@ -47,23 +48,38 @@ class Login extends Component {
 
     login = () => {
         const { username, password } = this.state;
-        //     const self = this;
-        //     request({
-        //       method: 'POST',
-        //       url: '/login',
-        //       data: { username, password }
-        //     })
-        //       .then((data) => {
-        //         console.log('登录成功：' + JSON.stringify(data));
-        //         saveToken(data.data);
-        //         navigationUtil.reset(self.props.navigation, 'Main');
-        //       })
-        //       .catch(err => {
-        //         Alert.alert('登录失败', err.message || err);
-        //       });
+        let url = 'http://10.112.17.185:8086/api/v1/info/login' //实验室服务器
+        // let formData = new FormData();
+        // formData.append('username', username);
+        // formData.append('password', password);
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
+        })
+            .then((res) => res.json())
+            .then((json) => {
+                console.log(json)
+                if (json) {
+                    if (json.error) {
+                        Toast.showShortCenter('用户名或密码错误！')
+                    } else {
+                        
+                        // 登录成功后跳转页面
+                        this.props.navigation.navigate('Home', {})
+                    }
+                } else {
+                    Toast.showShortCenter('登录失败')
+                }
 
-        // @TODO 带连接登录接口
-        this.props.navigation.navigate('Home', {})
+            }).catch((e) => {
+                Toast.showShortCenter('网络请求出错：' + e)
+            });
     };
 }
 

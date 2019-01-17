@@ -1,6 +1,6 @@
 import maryData from './maryData'
 import felixData from './felixData'
-const BASE_URL = 'http://10.112.249.109:60000'
+const BASE_URL = 'http://10.112.17.185:8086'
 
 export function getMetaData(url) {
     return {
