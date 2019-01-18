@@ -1,5 +1,6 @@
 import maryData from './maryData'
 import felixData from './felixData'
+import friendsInfo from './friendsInfo'
 const BASE_URL = 'http://10.112.17.185:8086'
 
 export function getMetaData(url) {
@@ -39,5 +40,11 @@ export function genToken(url) {
         //测试用户felix
         //token1: "dc6f940cb0ba72697981e6aa873a8aa0",
         //token2: "3007203d4a337c166c737133833a2f07"
+    }
+}
+
+export function getFriendsInfo(url) {
+    return {
+        "data": friendsInfo
     }
 }

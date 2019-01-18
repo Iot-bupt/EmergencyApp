@@ -8,94 +8,37 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableHighlight, TouchableOpacity, Button } from 'react-native'
 import Icon from "react-native-vector-icons/Ionicons";
-
-
-
-
+import { getFriendsInfo } from '../api/index';
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { loginActions } from '../actions/index'
 
 
 class FriendListScreen extends React.Component {
 
     render() {
+        const { profile } = this.props
+        const friendsInfo = getFriendsInfo('/getFriendsInfo').data
+
         return (
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1 }}>{
+                friendsInfo.map((friend, index) =>
 
-                <View style={styles.chatItem}>
-                    <View style={{ height: 20, width: 20}}>
-                        <Icon name="md-people" size={20} color='#1EA114'/>
-                    </View>
-                    <View style={{ marginHorizontal: 10 }}>
-                        <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>IM讨论小组</Text>
-                    </View>
-                </View>
-                <View style={styles.chatItem}>
-                    <View style={{ height: 20, width: 20}}>
-                        <Icon name="md-people" size={20} color='#1EA114'/>
-                    </View>
-                    <View style={{ marginHorizontal: 10 }}>
-                        <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>Gru使用讨论</Text>
-                    </View>
-                </View>
-                <View style={styles.chatItem}>
-                    <View style={{ height: 20, width: 20}}>
-                        <Icon name="md-people" size={20} color='#1EA114'/>
-                    </View>
-                    <View style={{ marginHorizontal: 10 }}>
-                        <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>测试群组</Text>
-                    </View>
-                </View>
-
-
-                <View style={styles.chatItem}>
-                    <View style={{ height: 20, width: 20}}>
-                        <Icon name="md-person" size={20} color='#1EA114'/>
-                    </View>
-                    <View style={{ marginHorizontal: 10 }}>
-                        <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>sumory.wu</Text>
-                    </View>
-                </View>
-                <View style={styles.chatItem}>
-                    <View style={{ height: 20, width: 20}}>
-                        <Icon name="md-person" size={20} color='#1EA114'/>
-                    </View>
-                    <View style={{ marginHorizontal: 10 }}>
-                        <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>felix</Text>
-                    </View>
-                </View>
-                <View style={styles.chatItem}>
-                    <View style={{ height: 20, width: 20}}>
-                        <Icon name="md-person" size={20} color='#1EA114'/>
-                    </View>
-                    <View style={{ marginHorizontal: 10 }}>
-                        <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>sunny</Text>
-                    </View>
-                </View>
-                <View style={styles.chatItem}>
-                    <View style={{ height: 20, width: 20}}>
-                        <Icon name="md-person" size={20} color='#1EA114'/>
-                    </View>
-                    <View style={{ marginHorizontal: 10 }}>
-                        <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>bruce</Text>
-                    </View>
-                </View>
-                <View style={styles.chatItem}>
-                    <View style={{ height: 20, width: 20}}>
-                        <Icon name="md-person" size={20} color='#1EA114'/>
-                    </View>
-                    <View style={{ marginHorizontal: 10 }}>
-                        <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>bamzi</Text>
-                    </View>
-                </View>
-                <View style={styles.chatItem}>
-                    <View style={{ height: 20, width: 20}}>
-                        <Icon name="md-person" size={20} color='#1EA114'/>
-                    </View>
-                    <View style={{ marginHorizontal: 10 }}>
-                        <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>roy</Text>
-                    </View>
-                </View>
-
-
+                    <TouchableOpacity style={styles.chatItem} key={index} key={index} onPress={() => {
+                        this.props.navigation.navigate('SingleChatroom', {
+                            chatType: 0, // 单聊
+                            chatWithId: friend.id,
+                            showName: friend.username,
+                            myProfile: profile,
+                        })
+                    }}>
+                        <View style={{ height: 20, width: 20 }}>
+                            <Icon name="md-people" size={20} color='#1EA114' />
+                        </View>
+                        <View style={{ marginHorizontal: 10 }}>
+                            <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>{friend.username}</Text>
+                        </View>
+                    </TouchableOpacity>)}
             </View>
         );
     }
@@ -127,7 +70,7 @@ const styles = StyleSheet.create({
     },
     chatItem: {
         flexDirection: 'row',
-        alignItems:'center',
+        alignItems: 'center',
         backgroundColor: '#ffffff',//好友列表全部
         borderBottomWidth: 1,
         borderBottomColor: '#cccccc',
@@ -137,4 +80,18 @@ const styles = StyleSheet.create({
     }
 });
 
-export default FriendListScreen;
+function mapStateToProps(state) {
+    return {
+        profile: state.chat.profile
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        actions: bindActionCreators({ ...loginActions }, dispatch)
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(FriendListScreen)
+
+//export default FriendListScreen;
