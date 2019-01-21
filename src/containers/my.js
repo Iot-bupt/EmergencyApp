@@ -6,7 +6,7 @@
 
 
 import React from 'react';
-import { StyleSheet, View, Text, ListView, Image, Switch, Button } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Image, Switch, Button } from 'react-native';
 import Icon from "react-native-vector-icons/Ionicons";
 import CoverageCell from '../components/coverageCell';
 import { getLongitudeAndLatitude } from '../utils/LocationUtil';
@@ -24,7 +24,7 @@ class AboutMyScreen extends React.Component {
         }
     }
 
-    LoginOut = () =>{
+    LoginOut = () => {
         this.props.navigation.navigate('Login', {})
     }
 
@@ -65,16 +65,18 @@ class AboutMyScreen extends React.Component {
                         </View>
                     </View>
                 </View>
-                <View style={styles.setting}>
-                    <View style={styles.settingItem}>
-                        <View style={{ height: 20, width: 20 }}>
-                            <Icon name="md-clipboard" size={20} color='#0A60FE' />
-                        </View>
-                        <View style={{ marginHorizontal: 10 }}>
-                            <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>巡检</Text>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('Inspection')}>
+                    <View style={styles.setting}>
+                        <View style={styles.settingItem}>
+                            <View style={{ height: 20, width: 20 }}>
+                                <Icon name="md-clipboard" size={20} color='#0A60FE' />
+                            </View>
+                            <View style={{ marginHorizontal: 10 }}>
+                                <Text style={{ fontSize: 16, color: 'rgb(143,163,174)' }}>巡检</Text>
+                            </View>
                         </View>
                     </View>
-                </View>
+                </TouchableOpacity>
                 <View style={styles.setting}>
                     <View style={styles.settingItem}>
                         <View style={{ height: 20, width: 20 }}>
@@ -91,7 +93,7 @@ class AboutMyScreen extends React.Component {
                             value={this.state.locationSwitchIsOn} />
                     </View>
                 </View>
-                <View style={{marginTop:150}}>
+                <View style={{ marginTop: 150 }}>
                     <Button title='退出登录' onPress={() => { this.LoginOut() }} />
                 </View>
             </View>

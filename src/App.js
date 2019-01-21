@@ -4,6 +4,7 @@ import MainContainer from './containers/main'
 import LoginContainer from './containers/Login'
 import SingleChatroomContainer from './containers/SingleChatroom'
 import PublicChatroomContainer from './containers/PublicChatroom'
+import InspectionContainer from './containers/Inspection'
 import VideoChatContainer from './containers/VideoChat'
 import AboutMy from './containers/my'
 import FriendList from './containers/friendList'
@@ -57,6 +58,7 @@ const AppNavigator = createStackNavigator({
     Login: LoginContainer,
     SingleChatroom: SingleChatroomContainer,
     PublicChatroom: PublicChatroomContainer,
+    Inspection: InspectionContainer,
     VideoChat: VideoChatContainer //视频路由
 }, {
         initialRouteName: 'Login',

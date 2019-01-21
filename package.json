@@ -7,10 +7,14 @@
     "test": "jest"
   },
   "dependencies": {
+    "@ant-design/react-native": "^3.0.6",
     "@remobile/react-native-toast": "^1.0.7",
+    "antd-mobile": "^2.2.8",
     "apsl-react-native-button": "^3.1.1",
+    "babel-plugin-import": "^1.11.0",
     "events": "^3.0.0",
     "react": "16.6.0-alpha.8af6728",
+    "react-dom": "^16.7.0",
     "react-native": "0.57.4",
     "react-native-gesture-handler": "^1.0.9",
     "react-native-image-crop-picker": "^0.21.3",
