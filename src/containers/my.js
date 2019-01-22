@@ -18,6 +18,10 @@ import StorageUtil from '../utils/StorageUtil'
 import Toast from '@remobile/react-native-toast';
 
 class AboutMyScreen extends React.Component {
+    static navigationOptions = {
+        header: null
+    }
+    
     constructor(props) {
         super(props);
 
