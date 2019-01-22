@@ -3,6 +3,7 @@
  * @flow
  *
  * 好友列表
+ * 暂时废除理由：需要显示单聊、群聊。因此把原来消息页的逻辑改成通讯录页。重写页面为AddressBook.js
  */
 
 import React from 'react';

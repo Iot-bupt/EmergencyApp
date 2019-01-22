@@ -8,6 +8,7 @@ import InspectionContainer from './containers/Inspection'
 import VideoChatContainer from './containers/VideoChat'
 import AboutMy from './containers/my'
 import FriendList from './containers/friendList'
+import AddressBook from './containers/AddressBook'
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunkMiddleware from 'redux-thunk';
@@ -24,7 +25,7 @@ import {
 //配置navigator
 const ChatStackNavigator = createBottomTabNavigator({
     消息: { screen: MainContainer },
-    通讯录: { screen: FriendList },
+    通讯录: { screen: AddressBook },
     我的: { screen: AboutMy },
 }, {
         navigationOptions: ({ navigation }) => ({

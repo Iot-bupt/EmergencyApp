@@ -23,12 +23,12 @@ class PublicChatroomPage extends Component {
         this.chatType = this.props.navigation.getParam('chatType', 'unknown') //@param chatType:聊天类型
         this.chatWithId = this.props.navigation.getParam('chatWithId', 0)  //@param chatWithId:群聊房间Id
         this.showName = this.props.navigation.getParam('showName', 'unknown') //@param showName:群聊名称
-        this.userMap = this.props.navigation.getParam('userMap', {}) //@param userMap:用户信息映射
     }
 
     render() {
         const { chat } = this.props
         var chatWithId = this.chatWithId
+        console.log(this.myProfile)
         var myId = this.myProfile.id
 
         //Redux统一管理聊天信息。所以在每个聊天页面都需要整理出当前聊天群组的信息
@@ -133,8 +133,8 @@ class PublicChatroomPage extends Component {
 
     //根据用户Id获取用户名
     getUserNameById(id) {
-        var userMap = this.userMap
-        return userMap[id].username
+        // @TODO 从多聊信息中获取Id
+        return '待定'
     }
 
 };

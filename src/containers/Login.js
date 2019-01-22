@@ -58,7 +58,7 @@ class Login extends Component {
     }
 
     login = (username, password) => {
-        console.log(username, password)
+        // console.log(username, password)
         if (!username || !password) {
             return
         }
@@ -75,7 +75,6 @@ class Login extends Component {
         })
             .then((res) => res.json())
             .then((json) => {
-                console.log(json)
                 if (json) {
                     if (json.error) {
                         Toast.showShortCenter('用户名或密码错误！')
@@ -84,7 +83,7 @@ class Login extends Component {
                         StorageUtil.set('hasLogin', { 'hasLogin': true });
                         StorageUtil.set('username', { 'username': username });
                         StorageUtil.set('password', { 'password': password });
-                        console.log('存起来的信息：',username,password)
+                        // console.log('存起来的信息：',username,password)
                         // 登录成功后跳转页面
                         this.props.navigation.navigate('Home', {})
                     }
@@ -109,11 +108,11 @@ class Login extends Component {
         StorageUtil.get('username', (error, object) => {
             if (!error && object && object.username) {
                 username = object.username
-                console.log(username)
+                // console.log(username)
                 StorageUtil.get('password', (error, object) => {
                     if (!error && object && object.password) {
                         password = object.password
-                        console.log(username,password)
+                        // console.log(username,password)
                         this.login(username, password)
                     } else {
                         Toast.showShortCenter('数据异常,请登录！');
@@ -131,10 +130,10 @@ class Login extends Component {
         StorageUtil.get('hasLogin', (error, object) => {
             if (!error && object != null && object.hasLogin) {
                 Toast.showShortCenter('自动登录中...')
-                console.log('自动登录')
+                // console.log('自动登录')
                 this.autoLogin()
             } else {
-                console.log('手动登录')
+                // console.log('手动登录')
                 return
             }
         })

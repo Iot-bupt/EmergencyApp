@@ -1,33 +1,33 @@
 [
     {
-        "username": "Sumory",
+        "name": "Sumory",
         "role": "总中心调度员",
         "mail": "sumorywu@gmail.com",
         "id":204
     },
     {
-        "username": "Felix",
+        "name": "Felix",
         "role": "总中心监控员",
         "mail": "felix@qq.com",
         "id":202
     },
     {
-        "username": "Sunny",
+        "name": "Sunny",
         "role": "分中心调度员",
         "mail": "sunny@sina.com",
         "id":101
     },{
-        "username":"Mary",
+        "name":"Mary",
         "role":"分中心监控员",
         "mail":"mary@163.com",
         "id":102
     },{
-        "username":"Bruce",
+        "name":"Bruce",
         "role":"维修值班员",
         "mail":"brucelee@qq.com",
         "id":103
     },{
-        "username":"Bamzi",
+        "name":"Bamzi",
         "role":"管线单位维修员",
         "mail":"bamzi@bupt.edu.cn",
         "id":104

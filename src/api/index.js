@@ -1,6 +1,7 @@
 import maryData from './maryData'
 import felixData from './felixData'
 import friendsInfo from './friendsInfo'
+import groupsInfo from './groupsInfo'
 const BASE_URL = 'http://10.112.17.185:8086'
 
 export function getMetaData(url) {
@@ -46,5 +47,11 @@ export function genToken(url) {
 export function getFriendsInfo(url) {
     return {
         "data": friendsInfo
+    }
+}
+
+export function getGroupsInfo(url) {
+    return {
+        "data": groupsInfo
     }
 }
