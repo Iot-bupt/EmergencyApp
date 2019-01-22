@@ -14,6 +14,8 @@ import { getMetaData } from '../api/index';
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { loginActions,locationActions } from '../actions/index'
+import StorageUtil from '../utils/StorageUtil'
+import Toast from '@remobile/react-native-toast';
 
 class AboutMyScreen extends React.Component {
     constructor(props) {
@@ -25,6 +27,8 @@ class AboutMyScreen extends React.Component {
     }
 
     LoginOut = () => {
+        StorageUtil.set('hasLogin',{'hasLogin':false})
+        Toast.showShortCenter('注销成功，请重新登录！')
         this.props.navigation.navigate('Login', {})
     }
 
