@@ -8,21 +8,14 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, ListView, Image } from 'react-native';
 import CoverageCell from '../components/coverageCell';
-import { getFriendsInfo, getGroupsInfo } from '../api/index';
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { loginActions } from '../actions/index'
 
-// 初始化获取数据
-// @TODO 代码放在这里合适吗？
-const friendsInfo = getFriendsInfo('/getFriendsInfo').data
-const groupsInfo = getGroupsInfo('/getGroupsInfo').data
-
-// CoverageArrs:处理后传入组件的数据
 var CoverageArrs = [{
-    title: '联系人', persons: friendsInfo, chatType: 'user'
+    title: '联系人', persons: [], chatType: 'user'
 }, {
-    title: '群聊', persons: groupsInfo, chatType: 'group'
+    title: '群聊', persons: [], chatType: 'group'
 }]
 
 class AddressBook extends Component {
@@ -33,7 +26,7 @@ class AddressBook extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataSource: new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }).cloneWithRows(CoverageArrs),
+            dataSource: new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
         };
     }
 
@@ -43,6 +36,66 @@ class AddressBook extends Component {
         return (
             <CoverageCell title={title} cars={persons} chatType={chatType} myProfile={profile} detail={this.detail.bind(this)} navigation={this.props.navigation} />
         )
+    }
+
+    componentDidMount() {
+        const { profile } = this.props
+        this.getFriendsInfo(profile.id)
+        this.getGroupsInfo(profile.id)
+    }
+
+    getFriendsInfo = (id) => {
+        console.log(id)
+        let url = 'http://10.112.17.185:8086/api/v1/user/user?Id=' + id
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'text/html',
+            }
+        }).then((res) => {
+            if (res.status == '200') {
+                res.json()
+                    .then((json) => {
+                        CoverageArrs[0].persons = json
+                        // fix:两个异步请求后分别setstate，会导致点击无法收缩展开
+                        /* 方法一：在一个请求成功后再请求第二个
+                        * 缺点：耦合性太强
+                        * this.getGroupsInfo(id)
+                        * 方法二：并行异步请求，但是只setstate一次
+                        * 理由：数据源中的数据本身是不可修改的，但clone方法会自动提取新数据并进行逐行对比？？？*/
+                    })
+            } else {
+                Toast.showShortCenter('网络请求错误:' + res.status)
+            }
+        }).catch((error) => {
+            console.error("error")
+            console.error(error)
+        })
+    }
+
+    getGroupsInfo = (id) => {
+        let url = 'http://10.112.17.185:8086/api/v1/user/groupByUserId?userId=' + id
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'text/html',
+            }
+        }).then((res) => {
+            if (res.status == '200') {
+                res.json()
+                    .then((json) => {
+                        CoverageArrs[1].persons = json
+                        this.setState({
+                            dataSource: this.state.dataSource.cloneWithRows(CoverageArrs),
+                        });
+                    })
+            } else {
+                Toast.showShortCenter('网络请求错误:' + res.status)
+            }
+        }).catch((error) => {
+            console.error("error")
+            console.error(error)
+        })
     }
 
     detail(title) {

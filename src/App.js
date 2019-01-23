@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { createBottomTabNavigator, createAppContainer, createStackNavigator } from 'react-navigation'
-import MainContainer from './containers/main'
 import ChatList from './containers/ChatList'
 import LoginContainer from './containers/Login'
 import SingleChatroomContainer from './containers/SingleChatroom'
@@ -8,7 +7,6 @@ import PublicChatroomContainer from './containers/PublicChatroom'
 import InspectionContainer from './containers/Inspection'
 import VideoChatContainer from './containers/VideoChat'
 import AboutMy from './containers/my'
-import FriendList from './containers/friendList'
 import AddressBook from './containers/AddressBook'
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { createStore, applyMiddleware, combineReducers } from 'redux';

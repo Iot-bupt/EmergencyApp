@@ -28,7 +28,6 @@ class PublicChatroomPage extends Component {
     render() {
         const { chat } = this.props
         var chatWithId = this.chatWithId
-        console.log(this.myProfile)
         var myId = this.myProfile.id
 
         //Redux统一管理聊天信息。所以在每个聊天页面都需要整理出当前聊天群组的信息
@@ -133,8 +132,9 @@ class PublicChatroomPage extends Component {
 
     //根据用户Id获取用户名
     getUserNameById(id) {
+        console.log('getusernamebyid:',id)
         // @TODO 从多聊信息中获取Id
-        return '待定'
+        return '用户'+id
     }
 
 };
