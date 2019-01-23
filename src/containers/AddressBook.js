@@ -41,7 +41,7 @@ class AddressBook extends Component {
     componentDidMount() {
         const { profile } = this.props
         this.getFriendsInfo(profile.id)
-        this.getGroupsInfo(profile.id)
+        //this.getGroupsInfo(profile.id)
     }
 
     getFriendsInfo = (id) => {
@@ -58,11 +58,11 @@ class AddressBook extends Component {
                     .then((json) => {
                         CoverageArrs[0].persons = json
                         // fix:两个异步请求后分别setstate，会导致点击无法收缩展开
-                        /* 方法一：在一个请求成功后再请求第二个
+                        /* 解决方法：在一个请求成功后再请求第二个，强制给两个异步请求排序
                         * 缺点：耦合性太强
                         * this.getGroupsInfo(id)
-                        * 方法二：并行异步请求，但是只setstate一次
-                        * 理由：数据源中的数据本身是不可修改的，但clone方法会自动提取新数据并进行逐行对比？？？*/
+                        */
+                        this.getGroupsInfo(id)
                     })
             } else {
                 Toast.showShortCenter('网络请求错误:' + res.status)
