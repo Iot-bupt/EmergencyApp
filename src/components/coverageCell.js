@@ -49,21 +49,20 @@ export default class CoverageCell extends Component {
     // }
 
     render() {
-        const { title, cars, chatType, myProfile, userMap } = this.props
+        const { title, cars, chatType, myProfile } = this.props
         return (
             <View style={{ flex: 1 }}>
                 <TouchableOpacity onPress={() => { this.detail(title) }}>
                     <View style={styles.chatBlock}>
                         <View style={{ height: 20, width: 20 }}>
-                            <Icon name="md-mail" size={20} color='rgb(173,185,191)' />
+                            <Icon name="md-people" size={20} color='rgb(173,185,191)' />
                         </View>
                         <View style={{ marginHorizontal: 10, flex: 3 }}>
                             <Text style={{ fontSize: 20, color: 'rgb(173,185,191)' }}>{title}</Text>
                         </View>
-                        <View style={styles.tip}>
+                        {/* <View style={styles.tip}>
                             <Text style={styles.tipText}>3</Text>
-                        </View>
-                        {/* <View style={{ backgroundColor: this.state.isShow ? 'red' : 'green', height: 15, width: 15 }}></View> */}
+                        </View> */}
                     </View>
                 </TouchableOpacity>
                 {/* {this.state.isShow ? <View>{this.isShowText()}</View> : <View></View>} */}
@@ -83,7 +82,6 @@ export default class CoverageCell extends Component {
                                     chatWithId: cars[index].id,
                                     showName: cars[index].name,
                                     myProfile: myProfile,
-                                    userMap: userMap
                                 })
                             }
                         }

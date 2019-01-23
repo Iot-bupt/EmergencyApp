@@ -13,9 +13,15 @@ import { getLongitudeAndLatitude } from '../utils/LocationUtil';
 import { getMetaData } from '../api/index';
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { loginActions } from '../actions/index'
+import { loginActions,locationActions } from '../actions/index'
+import StorageUtil from '../utils/StorageUtil'
+import Toast from '@remobile/react-native-toast';
 
 class AboutMyScreen extends React.Component {
+    static navigationOptions = {
+        header: null
+    }
+    
     constructor(props) {
         super(props);
 
@@ -25,6 +31,8 @@ class AboutMyScreen extends React.Component {
     }
 
     LoginOut = () => {
+        StorageUtil.set('hasLogin',{'hasLogin':false})
+        Toast.showShortCenter('注销成功，请重新登录！')
         this.props.navigation.navigate('Login', {})
     }
 
@@ -35,7 +43,7 @@ class AboutMyScreen extends React.Component {
             this.timer = setInterval(
                 () => {
                     getLongitudeAndLatitude().then((locationArr) => {
-                        console.log(locationArr)
+                        this.props.actions.sendLocationMessage(locationArr)
                     })
                 },//延时操作
                 1000       //延时时间
@@ -140,7 +148,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        actions: bindActionCreators({ ...loginActions }, dispatch)
+        actions: bindActionCreators({ ...loginActions,...locationActions }, dispatch)
     }
 }
 

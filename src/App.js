@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import { createBottomTabNavigator, createAppContainer, createStackNavigator } from 'react-navigation'
-import MainContainer from './containers/main'
+import ChatList from './containers/ChatList'
 import LoginContainer from './containers/Login'
 import SingleChatroomContainer from './containers/SingleChatroom'
 import PublicChatroomContainer from './containers/PublicChatroom'
 import InspectionContainer from './containers/Inspection'
 import VideoChatContainer from './containers/VideoChat'
 import AboutMy from './containers/my'
-import FriendList from './containers/friendList'
+import AddressBook from './containers/AddressBook'
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunkMiddleware from 'redux-thunk';
@@ -21,10 +21,10 @@ import {
 
 
 
-//配置navigator
-const ChatStackNavigator = createBottomTabNavigator({
-    消息: { screen: MainContainer },
-    通讯录: { screen: FriendList },
+//配置tab navigator
+const TabNavigator = createBottomTabNavigator({
+    消息: { screen: ChatList },
+    通讯录: { screen: AddressBook },
     我的: { screen: AboutMy },
 }, {
         navigationOptions: ({ navigation }) => ({
@@ -48,13 +48,22 @@ const ChatStackNavigator = createBottomTabNavigator({
             activeTintColor: '#1EA114',
             inactiveTintColor: 'gray',
         },
-
-
-
     });
+
+// fix:解决React-navigation 2.0版本header设置无效的问题
+TabNavigator.navigationOptions = ({ navigation }) => {
+    const component = TabNavigator.router.getComponentForState(navigation.state)
+    if (typeof component.navigationOptions === 'function') {
+        return component.navigationOptions({ navigation })
+    }
+    return component.navigationOptions
+}
+
+
+// 合并tab与react-navigation
 const AppNavigator = createStackNavigator({
 
-    Home: ChatStackNavigator,
+    Home: TabNavigator,
     Login: LoginContainer,
     SingleChatroom: SingleChatroomContainer,
     PublicChatroom: PublicChatroomContainer,

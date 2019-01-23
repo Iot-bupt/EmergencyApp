@@ -23,9 +23,9 @@ export function connectChat(authString) {
             console.log('disconnect')
         });
         socket.on('connect', function () {
-            console.log('connect ok.')
+            console.log('应急指挥：socket连接成功！')
             setTimeout(() => {
-                console.log('auth ok.')
+                console.log('应急指挥：auth ok.')
                 socket.emit('auth', authString)
             }, 2000);
 
