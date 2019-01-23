@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { createBottomTabNavigator, createAppContainer, createStackNavigator } from 'react-navigation'
 import MainContainer from './containers/main'
+import ChatList from './containers/ChatList'
 import LoginContainer from './containers/Login'
 import SingleChatroomContainer from './containers/SingleChatroom'
 import PublicChatroomContainer from './containers/PublicChatroom'
@@ -24,7 +25,7 @@ import {
 
 //配置tab navigator
 const TabNavigator = createBottomTabNavigator({
-    消息: { screen: MainContainer },
+    消息: { screen: ChatList },
     通讯录: { screen: AddressBook },
     我的: { screen: AboutMy },
 }, {

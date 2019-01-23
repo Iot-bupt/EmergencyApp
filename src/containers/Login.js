@@ -62,7 +62,7 @@ class Login extends Component {
         if (!username || !password) {
             return
         }
-        let url = 'http://10.112.17.185:8086/api/v1/info/login' //实验室服务器
+        let url = 'http://10.112.17.185:8086/api/v1/user/login' //实验室服务器
         fetch(url, {
             method: 'POST',
             headers: {
@@ -79,13 +79,13 @@ class Login extends Component {
                     if (json.error) {
                         Toast.showShortCenter('用户名或密码错误！')
                     } else {
-                        // 存储账户信息
+                        // 登录账户信息持久化
                         StorageUtil.set('hasLogin', { 'hasLogin': true });
                         StorageUtil.set('username', { 'username': username });
                         StorageUtil.set('password', { 'password': password });
-                        // console.log('存起来的信息：',username,password)
                         // 登录成功后跳转页面
-                        this.props.navigation.navigate('Home', {})
+                        // userid传递给主页进行处理
+                        this.props.navigation.navigate('Home', { userid: json.user_id })
                     }
                 } else {
                     Toast.showShortCenter('登录失败')

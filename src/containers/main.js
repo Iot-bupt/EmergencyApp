@@ -4,6 +4,7 @@
  *
  * @format
  * @flow
+ * 暂时废除理由：此页应该改为消息列表页
  */
 
 import React, { Component } from 'react';

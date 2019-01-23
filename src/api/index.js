@@ -55,3 +55,28 @@ export function getGroupsInfo(url) {
         "data": groupsInfo
     }
 }
+
+export function getProfileById(id) {
+    let url = BASE_URL + '/api/v1/user/userById?Id=' + id
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'text/html',
+        }
+    }).then((res) => {
+        if (res.status == '200') {
+            res.json()
+                .then((json) => {   
+                    console.log(json)
+                    var profile=json
+                    return profile
+                })
+        } else {
+            Toast.showShortCenter('网络请求错误:' + res.status)
+        }
+    }).catch((error) => {
+        console.error("error")
+        console.error(error)
+
+    })
+}
