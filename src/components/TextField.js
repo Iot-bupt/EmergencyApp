@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
   edit: {
     flex: 1,
     fontSize: 17,
+    paddingVertical:5,
     height: 35
   }
 });

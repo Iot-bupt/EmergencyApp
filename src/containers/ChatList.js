@@ -302,6 +302,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#D3D3D3'
     },
     emptyHintText: {
+        fontSize: 17,
         color: '#999999'
     },
     listItemContainer: {
