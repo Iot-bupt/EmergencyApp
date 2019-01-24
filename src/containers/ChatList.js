@@ -4,14 +4,24 @@
  *
  * 消息：展示聊天消息记录
  * @TODO 消息持久化
+ * 
+ * 消息格式(当前账户id为216)
+ * 单聊发送消息：{createTime: 1548247346000, msgType: 0, fromUserId: 216, toUserId: 205, content: "test"}
+ * 单聊接收消息：???
+ * 群聊发送消息：{createTime: 1548247539000, msgType: 1, fromUserId: 216, toUserId: 2, content: "33"}
+ * 群聊接受消息：{"id":0,"createTime":1445676996823,"fromId":205,"msgType":1,"target":{"id":"2","type":-1},"content":"test","expireTime":0}
  */
 
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, ListView, Image } from 'react-native';
+import { StyleSheet, View, Text, ListView, Image, FlatList, TouchableHighlight, Dimensions, PixelRatio } from 'react-native';
 import { genToken } from '../api/index';
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import TimeUtil from '../utils/TimeUtil';
 import { loginActions, chatActions, locationActions } from '../actions/index'
+import Icon from "react-native-vector-icons/Ionicons";
+
+const { width } = Dimensions.get('window');
 
 class ChatList extends Component {
     static navigationOptions = {
@@ -20,14 +30,71 @@ class ChatList extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            chatList: []
+        }
     }
 
     componentDidMount() {
         //路由跳转时携带的参数
         var userid = this.props.navigation.getParam('userid', {}) //@param myProfile:个人信息
 
-        //根据用户id获取用户名
+        //根据当前用户id获取账户信息
         this.getProfileById(userid)
+
+        //获取所有用户名和id
+        this.getAllFriends(userid)
+    }
+
+    getAllFriends = (id) => {
+        var allFriendsListById = {}
+        let getfriend_url = 'http://10.112.17.185:8086/api/v1/user/user?Id=' + id
+        //获取所有单聊联系人
+        fetch(getfriend_url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'text/html',
+            }
+        }).then((res) => {
+            if (res.status == '200') {
+                res.json()
+                    .then((json) => {
+                        json.map(function (friend, index) {
+                            allFriendsListById[friend.id] = friend.name
+                        })
+
+                        //获取所有群聊联系人
+                        let getgroup_url = 'http://10.112.17.185:8086/api/v1/user/groupByUserId?userId=' + id
+                        fetch(getgroup_url, {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'text/html',
+                            }
+                        }).then((res) => {
+                            if (res.status == '200') {
+                                res.json()
+                                    .then((json) => {
+                                        json.map(function (group, index) {
+                                            allFriendsListById[group.id] = group.name
+                                        })
+
+                                        this.setState({ allFriendsListById })
+                                    })
+                            } else {
+                                Toast.showShortCenter('网络请求错误:' + res.status)
+                            }
+                        }).catch((error) => {
+                            console.error("error")
+                            console.error(error)
+                        })
+                    })
+            } else {
+                Toast.showShortCenter('网络请求错误:' + res.status)
+            }
+        }).catch((error) => {
+            console.error("error")
+            console.error(error)
+        })
     }
 
     getProfileById = (id) => {
@@ -68,16 +135,139 @@ class ChatList extends Component {
         })
     }
 
-    render() {
+    loadConvertions = (messageArr) => {
+        /*@TODO 本函数处理逻辑
+        *对redux中存储的message进行整理，整理结果为对方id,对方name,最新message,msgType,unreadcount,timestamp
+        */
+        var chatList = {}
+        messageArr.forEach(msg => {
+            var tempId = msg.toUserId || msg.fromId //获取当前聊天对象id
+            if (!chatList[tempId]) { //查找chatlist中的key是否包含该id
+                //@TODO 根据id获取name
+                var tempName = this.getNameById(tempId)
+
+                chatList[tempId] = {
+                    chatWithId: tempId,
+                    chatWithName: tempName,
+                    msgType: msg.msgType,
+                    lastMsg: msg.content,
+                    createTime: msg.createTime
+                }
+            } else {
+                chatList[tempId]['lastMsg'] = msg.content
+                chatList[tempId]['createTime'] = msg.createTime
+            }
+        });
+        //this.setState({ chatList })
+        return chatList
+    }
+
+    getNameById = (id) => {
+        const { allFriendsListById } = this.state
+        return allFriendsListById[id]
+    }
+
+    renderItem = (data) => {
+        const { profile } = this.props
+        const { chatWithId, chatWithName, lastMsg, msgType, createTime } = data.item
+
         return (
-            <View></View>
+            <View>
+                <TouchableHighlight onPress={() => {
+                    if (msgType === 0) {
+                        this.props.navigation.navigate('SingleChatroom', {
+                            chatType: 'user',
+                            chatWithId: chatWithId,
+                            showName: '某单聊',
+                            myProfile: profile,
+                        })
+                    } else if (msgType === 1) {
+                        this.props.navigation.navigate('PublicChatroom', {
+                            chatType: 'group',
+                            chatWithId: chatWithId,
+                            showName: '某多聊',
+                            myProfile: profile,
+                        })
+                    }
+                }}>
+                    {/* <View style={styles.listItemContainer}>
+                        <View style={styles.listItemSubContainer}>
+                            <Text>用户{chatWithId}</Text>
+                        </View>
+                        <View style={styles.listItemSubContainer}>
+                            <Text>用户{chatWithId}</Text>
+                        </View>
+                    </View> */
+                        <View style={styles.listItemContainer}>
+                            {/* 头像 <Image source={''} style={{ width: 50, height: 50 }} backgroundColor='#dcdcdc' /> */}
+                            {(msgType === 0) ?
+                                <Icon name="md-person" size={30} color='rgb(173,185,191)' />
+                                :
+                                <Icon name="md-people" size={30} color='rgb(173,185,191)' />
+                            }
+
+                            <View style={styles.listItemTextContainer}>
+                                <View style={styles.listItemSubContainer}>
+                                    <Text numberOfLines={1} style={styles.listItemTitle}>{chatWithName}</Text>
+                                    <Text numberOfLines={1} style={styles.listItemTime}>{TimeUtil.formatChatTime(createTime)}</Text>
+                                </View>
+                                <View style={styles.listItemSubContainer}>
+                                    <Text numberOfLines={1} style={styles.listItemSubtitle}>{lastMsg}</Text>
+                                    {/* 未读气泡
+                                    {
+                                        data.item.unreadCount > 0 ? (
+                                            <View style={styles.redDot}>
+                                                <Text style={styles.redDotText}>{data.item.unreadCount}</Text>
+                                            </View>
+                                        ) : (null)
+                                    } */}
+                                </View>
+                            </View>
+                        </View>}
+                </TouchableHighlight>
+                <View style={styles.divider} />
+            </View>
+        )
+    }
+
+    render() {
+        const { chat } = this.props
+        //bug 不能在render内setstate
+        /* 方法一：在render中处理消息，不保存到state
+         * 方法二：找其他地方处理消息
+         */
+        var chatListObj = this.loadConvertions(chat.messages)
+        var chatListArr = []
+        //把对象chatListObj的值存为数组chatListArr
+        for (i in chatListObj) {
+            chatListArr.push(chatListObj[i])
+        }
+        return (
+            <View style={styles.container}>
+                <View style={styles.content}>
+                    {
+                        chatListArr.length == 0 ? (
+                            <Text style={styles.emptyHintText}>暂无会话消息</Text>
+                        ) : (
+                                < FlatList
+                                    ref="flatList"
+                                    data={chatListArr}
+                                    renderItem={this.renderItem}
+                                    keyExtractor={this._keyExtractor}
+                                    extraData={this.state}
+                                />
+                            )
+                    }
+                </View>
+            </View>
         )
     }
 }
 
 function mapStateToProps(state) {
     return {
-        profile: state.chat.profile
+        profile: state.chat.profile,
+        chat: state.chat
     }
 }
 
@@ -88,3 +278,58 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatList)
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    content: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        width: width,
+        alignItems: 'center' //垂直居中
+    },
+    divider: {
+        width: width,
+        height: 1 / PixelRatio.get(),
+        backgroundColor: '#D3D3D3'
+    },
+    emptyHintText: {
+        color: '#999999'
+    },
+    listItemContainer: {
+        flexDirection: 'row',
+        width: width,
+        paddingLeft: 15,
+        paddingRight: 15,
+        paddingTop: 10,
+        paddingBottom: 10,
+        alignItems: 'center',
+        backgroundColor: '#FFFFFF'
+    },
+    listItemTextContainer: {
+        flexDirection: 'column',
+        flex: 1,
+        paddingLeft: 15,
+    },
+    listItemSubContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    listItemTitle: {
+        color: '#333333',
+        fontSize: 16,
+        flex: 1,
+    },
+    listItemTime: {
+        color: '#999999',
+        fontSize: 12,
+    },
+    listItemSubtitle: {
+        color: '#999999',
+        fontSize: 14,
+        marginTop: 3,
+        flex: 1,
+    },
+})
