@@ -12,6 +12,7 @@
  * 群聊接受消息：{"id":0,"createTime":1445676996823,"fromId":205,"msgType":1,"target":{"id":"2","type":-1},"content":"test","expireTime":0}
  */
 
+import './setUserAgent.js'
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, ListView, Image, FlatList, TouchableHighlight, Dimensions, PixelRatio } from 'react-native';
 import { genToken } from '../api/index';
