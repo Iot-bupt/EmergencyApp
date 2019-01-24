@@ -24,6 +24,10 @@ import Icon from "react-native-vector-icons/Ionicons";
 
 const { width } = Dimensions.get('window');
 
+//@TODO 待优化
+//为了防止此数据在页面加载时丢失，存为全局变量
+var userMap={}
+
 class ChatList extends Component {
     static navigationOptions = {
         header: null
@@ -48,7 +52,7 @@ class ChatList extends Component {
     }
 
     getAllFriends = (id) => {
-        var allFriendsListById = {}
+        //var userMap = {}
         let getfriend_url = 'http://10.112.17.185:8086/api/v1/user/user?Id=' + id
         //获取所有单聊联系人
         fetch(getfriend_url, {
@@ -61,7 +65,7 @@ class ChatList extends Component {
                 res.json()
                     .then((json) => {
                         json.map(function (friend, index) {
-                            allFriendsListById[friend.id] = friend.name
+                            userMap[friend.id] = friend.name
                         })
 
                         //获取所有群聊联系人
@@ -76,10 +80,11 @@ class ChatList extends Component {
                                 res.json()
                                     .then((json) => {
                                         json.map(function (group, index) {
-                                            allFriendsListById[group.id] = group.name
+                                            userMap[group.id] = group.name
                                         })
 
-                                        this.setState({ allFriendsListById })
+                                        //fix:如果把数据保存在state，由于componentDidMount只在初始化时运行一次，页面再加载时此数据会丢失报错bug
+                                        //this.setState({ userMap })
                                     })
                             } else {
                                 Toast.showShortCenter('网络请求错误:' + res.status)
@@ -164,8 +169,8 @@ class ChatList extends Component {
     }
 
     getNameById = (id) => {
-        const { allFriendsListById } = this.state
-        return allFriendsListById[id]
+        //const { userMap } = this.state
+        return userMap[id]
     }
 
     renderItem = (data) => {
