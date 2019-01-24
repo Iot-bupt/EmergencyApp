@@ -122,7 +122,7 @@ class ChatList extends Component {
                             token2: data.token2
                         })
                         actions.connectChat(authString) // redux管理聊天socket连接
-                        actions.connectLocation() // redux管理定位信息socket连接
+                        actions.connectLocation(json.name) // redux管理定位信息socket连接
                         actions.setMyProfile(json) // redux管理全局用户信息
                     })
             } else {
