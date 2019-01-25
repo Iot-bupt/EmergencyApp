@@ -7,9 +7,9 @@
  * 
  * 消息格式(当前账户id为216)
  * 单聊发送消息：{createTime: 1548247346000, msgType: 0, fromUserId: 216, toUserId: 205, content: "test"}
- * 单聊接收消息：???
+ * 单聊接收消息：{createTime: 1548331944918, msgType: 0, fromId: 205,content: "3333",expireTime: 0,id: 0,msgContentType: 0,target: {id: 216, type: -1}}
  * 群聊发送消息：{createTime: 1548247539000, msgType: 1, fromUserId: 216, toUserId: 2, content: "33"}
- * 群聊接受消息：{"id":0,"createTime":1445676996823,"fromId":205,"msgType":1,"target":{"id":"2","type":-1},"content":"test","expireTime":0}
+ * 群聊接受消息：{createTime":1445676996823, msgType: 1,"fromId":205,"target":{"id":"2","type":-1},"content":"test","expireTime":0,"id":0}
  */
 
 import './setUserAgent.js'
@@ -26,7 +26,7 @@ const { width } = Dimensions.get('window');
 
 //@TODO 待优化
 //为了防止此数据在页面加载时丢失，存为全局变量
-var userMap={}
+var userMap = {}
 
 class ChatList extends Component {
     static navigationOptions = {
@@ -145,11 +145,26 @@ class ChatList extends Component {
         /*@TODO 本函数处理逻辑
         *对redux中存储的message进行整理，整理结果为对方id,对方name,最新message,msgType,unreadcount,timestamp
         */
+        var userid = this.props.navigation.getParam('userid', {}) //@param myProfile:个人信息
         var chatList = {}
         messageArr.forEach(msg => {
-            var tempId = msg.toUserId || msg.fromId //获取当前聊天对象id
-            if (!chatList[tempId]) { //查找chatlist中的key是否包含该id
-                //@TODO 根据id获取name
+            var tempId = '' //获取当前聊天对象id
+
+            //群聊接受消息，需要从target取群聊id
+            if (msg.msgType === 1 && msg.fromId) { 
+                tempId = msg.target.id
+                console.log(123)
+            } else {
+                tempId = msg.toUserId || msg.fromId
+            }
+
+            //bug：群聊消息的接受方包括自己
+            if (msg.msgType === 1 && msg.fromId === userid) {
+                console.log('自己发送的群聊消息')
+                return false
+            }
+            //查找chatlist中的key是否包含该id
+            if (!chatList[tempId]) { 
                 var tempName = this.getNameById(tempId)
 
                 chatList[tempId] = {
@@ -184,14 +199,14 @@ class ChatList extends Component {
                         this.props.navigation.navigate('SingleChatroom', {
                             chatType: 'user',
                             chatWithId: chatWithId,
-                            showName: '某单聊',
+                            showName: chatWithName,
                             myProfile: profile,
                         })
                     } else if (msgType === 1) {
                         this.props.navigation.navigate('PublicChatroom', {
                             chatType: 'group',
                             chatWithId: chatWithId,
-                            showName: '某多聊',
+                            showName: chatWithName,
                             myProfile: profile,
                         })
                     }
