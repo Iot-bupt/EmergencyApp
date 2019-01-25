@@ -90,7 +90,7 @@ export default class videochat extends Component {
 
     this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => true });
     this.state = {
-      info: 'Initializing',
+      info: '连接中...',
       status: 'init',
       roomID: '',
       isFront: false,
@@ -113,14 +113,12 @@ export default class videochat extends Component {
   componentDidMount() {
 
     container = this
-    console.log('componentdidmount')
 
     // const socket = io.connect('https://react-native-webrtc.herokuapp.com', { transports: ['websocket'] });  // 原项目信令服务器
-    const socket = io.connect('http://10.112.17.185:31001', { transports: ['websocket'] }); // 实验室服务器java后台
+    const socket = io.connect('http://39.104.189.84:30200', { transports: ['websocket'] }); // 实验室服务器java后台
 
     // @TODO bug：收到多次连接广播
     socket.connect()
-    console.log(socket)
 
     this.setState({ socket })
 
@@ -411,7 +409,7 @@ export default class videochat extends Component {
             return <RTCView key={index} streamURL={remote} style={styles.remoteView} />
           })
         }
-        <Button title='退出' onPress={() => { this.goBackToLastPage() }} />
+        <Button title='退出群聊' onPress={() => { this.goBackToLastPage() }} />
       </View>
     );
   }
