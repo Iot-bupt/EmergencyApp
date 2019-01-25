@@ -31,20 +31,24 @@ class AboutMyScreen extends React.Component {
     }
 
     LoginOut = () => {
+        const { profile, actions } = this.props
+        // 取消自动登录
         StorageUtil.set('hasLogin', { 'hasLogin': false })
+        // 清除聊天记录
+        actions.loginOut()
         Toast.showShortCenter('注销成功，请重新登录！')
         this.props.navigation.navigate('Login', {})
     }
 
     render() {
-        const { profile } = this.props
+        const { profile, actions } = this.props
         if (this.state.locationSwitchIsOn) {
             console.log('Location switch on.')
             Toast.showShortCenter('开始上传定位信息')
             this.timer = setInterval(
                 () => {
                     getLongitudeAndLatitude().then((locationArr) => {
-                        this.props.actions.sendLocationMessage(profile.id, profile.name, locationArr)
+                        actions.sendLocationMessage(profile.id, profile.name, locationArr)
                     })
                 },//延时操作
                 5000       //延时时间

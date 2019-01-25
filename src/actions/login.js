@@ -11,6 +11,12 @@ export function setProfile(profile) {
     };
 }
 
+export function loginOut(){
+    return {
+        type: 'LOGIN_OUT'
+    }
+}
+
 export function setMyProfile(profile) {
     // action通过dispatch方法传递到reducer，进而改变redux的state
     return dispatch => {

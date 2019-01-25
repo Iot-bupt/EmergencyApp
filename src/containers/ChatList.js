@@ -151,7 +151,7 @@ class ChatList extends Component {
             var tempId = '' //获取当前聊天对象id
 
             //群聊接受消息，需要从target取群聊id
-            if (msg.msgType === 1 && msg.fromId) { 
+            if (msg.msgType === 1 && msg.fromId) {
                 tempId = msg.target.id
             } else {
                 tempId = msg.toUserId || msg.fromId
@@ -162,8 +162,17 @@ class ChatList extends Component {
                 // console.log('自己发送的群聊消息')
                 return false
             }
+
+            //bug: 在不杀死程序时，前端更换账户，socket服务器却不知道更换账户
+            /* 比如前端先登录一个叫mary的用户，建立的socket是mary的连接。
+             * 然后在前端注销账户，立即换成sunny登录，前端看起来会用sunny的id重新connect一遍socket。
+             * 但是测出来，发现服务器还认为现在是mary */
+            if (tempId === userid) {
+                return false
+            }
+
             //查找chatlist中的key是否包含该id
-            if (!chatList[tempId]) { 
+            if (!chatList[tempId]) {
                 var tempName = this.getNameById(tempId)
 
                 chatList[tempId] = {
