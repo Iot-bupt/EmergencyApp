@@ -45,8 +45,7 @@ class AddressBook extends Component {
     }
 
     getFriendsInfo = (id) => {
-        console.log(id)
-        let url = 'http://10.112.17.185:8086/api/v1/user/user?Id=' + id
+        let url = 'http://39.104.189.84:30300/api/v1/user/user?Id=' + id
         fetch(url, {
             method: 'GET',
             headers: {
@@ -74,7 +73,7 @@ class AddressBook extends Component {
     }
 
     getGroupsInfo = (id) => {
-        let url = 'http://10.112.17.185:8086/api/v1/user/groupByUserId?userId=' + id
+        let url = 'http://39.104.189.84:30300/api/v1/user/groupByUserId?userId=' + id
         fetch(url, {
             method: 'GET',
             headers: {

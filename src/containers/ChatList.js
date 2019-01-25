@@ -53,7 +53,7 @@ class ChatList extends Component {
 
     getAllFriends = (id) => {
         //var userMap = {}
-        let getfriend_url = 'http://10.112.17.185:8086/api/v1/user/user?Id=' + id
+        let getfriend_url = 'http://39.104.189.84:30300/api/v1/user/user?Id=' + id
         //获取所有单聊联系人
         fetch(getfriend_url, {
             method: 'GET',
@@ -69,7 +69,7 @@ class ChatList extends Component {
                         })
 
                         //获取所有群聊联系人
-                        let getgroup_url = 'http://10.112.17.185:8086/api/v1/user/groupByUserId?userId=' + id
+                        let getgroup_url = 'http://39.104.189.84:30300/api/v1/user/groupByUserId?userId=' + id
                         fetch(getgroup_url, {
                             method: 'GET',
                             headers: {
@@ -106,7 +106,7 @@ class ChatList extends Component {
     getProfileById = (id) => {
         const { actions } = this.props
 
-        let url = 'http://10.112.17.185:8086/api/v1/user/userById?Id=' + id
+        let url = 'http://39.104.189.84:30300/api/v1/user/userById?Id=' + id
         fetch(url, {
             method: 'GET',
             headers: {
@@ -153,14 +153,13 @@ class ChatList extends Component {
             //群聊接受消息，需要从target取群聊id
             if (msg.msgType === 1 && msg.fromId) { 
                 tempId = msg.target.id
-                console.log(123)
             } else {
                 tempId = msg.toUserId || msg.fromId
             }
 
             //bug：群聊消息的接受方包括自己
             if (msg.msgType === 1 && msg.fromId === userid) {
-                console.log('自己发送的群聊消息')
+                // console.log('自己发送的群聊消息')
                 return false
             }
             //查找chatlist中的key是否包含该id

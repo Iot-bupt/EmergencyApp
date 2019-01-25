@@ -40,13 +40,14 @@ class AboutMyScreen extends React.Component {
         const { profile } = this.props
         if (this.state.locationSwitchIsOn) {
             console.log('Location switch on.')
+            Toast.showShortCenter('开始上传定位信息')
             this.timer = setInterval(
                 () => {
                     getLongitudeAndLatitude().then((locationArr) => {
                         this.props.actions.sendLocationMessage(profile.id, profile.name, locationArr)
                     })
                 },//延时操作
-                1000       //延时时间
+                5000       //延时时间
             );
         } else {
             console.log('Location switch off.')

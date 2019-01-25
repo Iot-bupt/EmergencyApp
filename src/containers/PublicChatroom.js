@@ -6,6 +6,8 @@ import { chatActions } from '../actions/index'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
+var userMapInGroup = {}
+
 class PublicChatroomPage extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: navigation.getParam('showName', 'unknown'),
@@ -23,6 +25,36 @@ class PublicChatroomPage extends Component {
         this.chatType = this.props.navigation.getParam('chatType', 'unknown') //@param chatType:聊天类型
         this.chatWithId = this.props.navigation.getParam('chatWithId', 0)  //@param chatWithId:群聊房间Id
         this.showName = this.props.navigation.getParam('showName', 'unknown') //@param showName:群聊名称
+    }
+
+    componentDidMount() {
+        var groupId = this.chatWithId
+        this.getUserInGroup(groupId)
+    }
+
+    getUserInGroup = (id) => {
+        let url = 'http://39.104.189.84:30300/api/v1/user/userByGroupId?chatGroupId=' + id
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'text/html',
+            }
+        }).then((res) => {
+            if (res.status == '200') {
+                res.json()
+                    .then((json) => {
+                        json.map(function (item, index) {
+                            userMapInGroup[item.id] = item.name
+                        })
+                    })
+            } else {
+                Toast.showShortCenter('网络请求错误:' + res.status)
+            }
+        }).catch((error) => {
+            console.error("error")
+            console.error(error)
+
+        })
     }
 
     render() {
@@ -132,9 +164,7 @@ class PublicChatroomPage extends Component {
 
     //根据用户Id获取用户名
     getUserNameById(id) {
-        console.log('getusernamebyid:',id)
-        // @TODO 从多聊信息中获取Id
-        return '用户'+id
+        return userMapInGroup[id]
     }
 
 };

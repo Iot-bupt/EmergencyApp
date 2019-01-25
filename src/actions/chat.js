@@ -36,7 +36,7 @@ export function connectChat(authString) {
             // dispatch(receiveMsg(msg))
         });
         socket.on('msg',function(msg){
-            console.log(msg)
+            // console.log(msg)
             dispatch(receiveMsg(msg))
         })
     }

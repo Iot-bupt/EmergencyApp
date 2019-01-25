@@ -62,7 +62,7 @@ class Login extends Component {
         if (!username || !password) {
             return
         }
-        let url = 'http://10.112.17.185:8086/api/v1/user/login' //实验室服务器
+        let url = 'http://39.104.189.84:30300/api/v1/user/login' //实验室服务器
         fetch(url, {
             method: 'POST',
             headers: {
