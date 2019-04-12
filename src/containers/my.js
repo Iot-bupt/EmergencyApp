@@ -9,7 +9,7 @@ import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image, Switch, Button } from 'react-native';
 import Icon from "react-native-vector-icons/Ionicons";
 import CoverageCell from '../components/coverageCell';
-import { getLongitudeAndLatitude } from '../utils/LocationUtil';
+import Geolocation from 'Geolocation'
 import { getMetaData } from '../api/index';
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -26,7 +26,9 @@ class AboutMyScreen extends React.Component {
         super(props);
 
         this.state = {
-            locationSwitchIsOn: false
+            locationSwitchIsOn: false,
+            locationWatchIsOn: false,
+            test: []
         }
     }
 
@@ -40,23 +42,33 @@ class AboutMyScreen extends React.Component {
         this.props.navigation.navigate('Login', {})
     }
 
+    beginWatchLocation() {
+        console.log('Location switch on.')
+        Toast.showShortCenter('开始上传定位信息')
+
+        const GeoOptions = {
+            maximumAge: 0,
+            timeout: 1000
+        }
+
+        this.state.watchID = Geolocation.watchPosition((location) => {
+            let locationArr = [location.coords.longitude, location.coords.latitude]
+            alert(locationArr[0] + '  ' + locationArr[1])
+            this.props.actions.sendLocationMessage(this.props.profile.id, this.props.profile.name, locationArr)
+        },
+            error => {
+                Toast.showShortCenter('获取位置失败')
+                alert(error.message)
+            }, GeoOptions
+        );
+    }
+    stopWatchLocation() {
+        console.log('Location switch off.')
+        Geolocation.clearWatch(this.state.watchID);
+    }
+
     render() {
         const { profile, actions } = this.props
-        if (this.state.locationSwitchIsOn) {
-            console.log('Location switch on.')
-            Toast.showShortCenter('开始上传定位信息')
-            this.timer = setInterval(
-                () => {
-                    getLongitudeAndLatitude().then((locationArr) => {
-                        actions.sendLocationMessage(profile.id, profile.name, locationArr)
-                    })
-                },//延时操作
-                5000       //延时时间
-            );
-        } else {
-            console.log('Location switch off.')
-            clearTimeout(this.timer)
-        }
 
         return (
 
@@ -102,7 +114,10 @@ class AboutMyScreen extends React.Component {
                         </View>
                         <View>
                             <Switch
-                                onValueChange={(value) => this.setState({ locationSwitchIsOn: value })}
+                                onValueChange={(value) => {
+                                    this.setState({ locationSwitchIsOn: value })
+                                    value ? this.beginWatchLocation() : this.stopWatchLocation()
+                                }}
                                 style={{ marginBottom: 10, marginTop: 10 }}
                                 value={this.state.locationSwitchIsOn} />
                         </View>
