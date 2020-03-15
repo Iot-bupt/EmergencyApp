@@ -21,6 +21,8 @@ import { bindActionCreators } from 'redux'
 import TimeUtil from '../utils/TimeUtil';
 import { loginActions, chatActions, locationActions } from '../actions/index'
 import Icon from "react-native-vector-icons/Ionicons";
+import { SERVER_URL } from '../const'
+import Toast from '@remobile/react-native-toast';
 
 const { width } = Dimensions.get('window');
 
@@ -53,7 +55,7 @@ class ChatList extends Component {
 
     getAllFriends = (id) => {
         //var userMap = {}
-        let getfriend_url = 'http://39.104.189.84:30300/api/v1/user/user?Id=' + id
+        let getfriend_url = SERVER_URL + '/api/v1/user/user?Id=' + id
         //获取所有单聊联系人
         fetch(getfriend_url, {
             method: 'GET',
@@ -69,7 +71,7 @@ class ChatList extends Component {
                         })
 
                         //获取所有群聊联系人
-                        let getgroup_url = 'http://39.104.189.84:30300/api/v1/user/groupByUserId?userId=' + id
+                        let getgroup_url = SERVER_URL + '/api/v1/user/groupByUserId?userId=' + id
                         fetch(getgroup_url, {
                             method: 'GET',
                             headers: {
@@ -106,7 +108,7 @@ class ChatList extends Component {
     getProfileById = (id) => {
         const { actions } = this.props
 
-        let url = 'http://39.104.189.84:30300/api/v1/user/userById?Id=' + id
+        let url = SERVER_URL + '/api/v1/user/userById?Id=' + id
         fetch(url, {
             method: 'GET',
             headers: {

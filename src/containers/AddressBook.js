@@ -11,6 +11,8 @@ import CoverageCell from '../components/coverageCell';
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { loginActions } from '../actions/index'
+import { SERVER_URL } from '../const'
+import Toast from '@remobile/react-native-toast';
 
 var CoverageArrs = [{
     title: '联系人', persons: [], chatType: 'user'
@@ -45,7 +47,7 @@ class AddressBook extends Component {
     }
 
     getFriendsInfo = (id) => {
-        let url = 'http://39.104.189.84:30300/api/v1/user/user?Id=' + id
+        let url = SERVER_URL + '/api/v1/user/user?Id=' + id
         fetch(url, {
             method: 'GET',
             headers: {
@@ -73,7 +75,7 @@ class AddressBook extends Component {
     }
 
     getGroupsInfo = (id) => {
-        let url = 'http://39.104.189.84:30300/api/v1/user/groupByUserId?userId=' + id
+        let url = SERVER_URL + '/api/v1/user/groupByUserId?userId=' + id
         fetch(url, {
             method: 'GET',
             headers: {

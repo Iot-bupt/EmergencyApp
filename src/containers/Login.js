@@ -10,6 +10,7 @@ import TextButton from '../components/TextButton';
 import TextField from '../components/TextField';
 import Toast from '@remobile/react-native-toast';
 import StorageUtil from '../utils/StorageUtil';
+import { SERVER_URL } from '../const';
 
 class Login extends Component {
     constructor(props) {
@@ -62,7 +63,7 @@ class Login extends Component {
         if (!username || !password) {
             return
         }
-        let url = 'http://39.104.189.84:30300/api/v1/user/login' //实验室服务器
+        let url = SERVER_URL + '/api/v1/user/login' //实验室服务器
         fetch(url, {
             method: 'POST',
             headers: {

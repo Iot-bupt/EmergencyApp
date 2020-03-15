@@ -1,7 +1,8 @@
 //import WS from 'react-native-websocket'
+import { SERVER_POST } from '../const'
 var ws
 var TEST_URL = "ws://echo.websocket.org" //连接测试url
-var BASE_URL = "ws://39.104.189.84:30270/api/v1/map/websocket"
+var BASE_URL = "ws://"+ SERVER_POST + "/api/v1/map/websocket"
 
 export function connectLocation(username) {
     var url = BASE_URL + '?username=' + username + '&usertype=producer'

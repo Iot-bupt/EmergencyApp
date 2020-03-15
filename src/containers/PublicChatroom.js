@@ -5,6 +5,7 @@ import TimeUtils from '../utils/TimeUtil'
 import { chatActions } from '../actions/index'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { SERVER_URL } from '../const'
 
 var userMapInGroup = {}
 
@@ -33,7 +34,7 @@ class PublicChatroomPage extends Component {
     }
 
     getUserInGroup = (id) => {
-        let url = 'http://39.104.189.84:30300/api/v1/user/userByGroupId?chatGroupId=' + id
+        let url = SERVER_URL + '/api/v1/user/userByGroupId?chatGroupId=' + id
         fetch(url, {
             method: 'GET',
             headers: {
