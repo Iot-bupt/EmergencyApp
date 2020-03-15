@@ -79,7 +79,8 @@ class AboutMyScreen extends React.Component {
                             <Image style={{ height: 70, width: 70, borderRadius: 35, backgroundColor: '#dcdcdc', paddingVertical: 3 }} source={require('../images/user2-128x128.jpg')} />
                             <View style={{ flex: 1, marginHorizontal: 15, paddingTop: 5, justifyContent: 'space-around' }}>
                                 <View>
-                                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#cccccc' }}>{profile.name}</Text>
+                                    {/* <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#cccccc' }}>{profile.name}</Text> */}
+                                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#cccccc' }}>mary</Text>
                                 </View>
                                 <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                                     <View style={{ backgroundColor: '#1EA114', borderRadius: 7, height: 14, width: 14 }}>

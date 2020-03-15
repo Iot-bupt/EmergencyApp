@@ -21,6 +21,9 @@ import { bindActionCreators } from 'redux'
 import TimeUtil from '../utils/TimeUtil';
 import { loginActions, chatActions, locationActions } from '../actions/index'
 import Icon from "react-native-vector-icons/Ionicons";
+import Toast from '@remobile/react-native-toast'
+import { SERVER_POST } from '../const'
+import { getMetaData } from '../api/index';
 
 const { width } = Dimensions.get('window');
 
@@ -53,74 +56,47 @@ class ChatList extends Component {
 
     getAllFriends = (id) => {
         //var userMap = {}
-        let getfriend_url = 'http://39.104.189.84:30300/api/v1/user/user?Id=' + id
+        let getfriend_url = SERVER_POST + '/api/v1/user/user?Id=' + id
         //获取所有单聊联系人
-        fetch(getfriend_url, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'text/html',
-            }
-        }).then((res) => {
-            if (res.status == '200') {
-                res.json()
-                    .then((json) => {
-                        json.map(function (friend, index) {
+                        var friendData = [{
+                            id: '201',
+                            name: 'felix',
+                        }]
+                        friendData.map(function (friend, index) {
                             userMap[friend.id] = friend.name
                         })
 
                         //获取所有群聊联系人
-                        let getgroup_url = 'http://39.104.189.84:30300/api/v1/user/groupByUserId?userId=' + id
-                        fetch(getgroup_url, {
-                            method: 'GET',
-                            headers: {
-                                'Content-Type': 'text/html',
-                            }
-                        }).then((res) => {
-                            if (res.status == '200') {
-                                res.json()
-                                    .then((json) => {
-                                        json.map(function (group, index) {
+                                    var groupData = [
+                                        {
+                                            "id": 160,
+                                            "name": "巡检人员oncall群"
+                                        },
+                                        {
+                                            "id": 180,
+                                            "name": "智能巡检效率沟通群"
+                                        },
+                                        {
+                                            "id": 190,
+                                            "name": "应急指挥群"
+                                        }
+                                    ]
+                                        groupData.map(function (group, index) {
                                             userMap[group.id] = group.name
                                         })
-
-                                        //fix:如果把数据保存在state，由于componentDidMount只在初始化时运行一次，页面再加载时此数据会丢失报错bug
-                                        //this.setState({ userMap })
-                                    })
-                            } else {
-                                Toast.showShortCenter('网络请求错误:' + res.status)
-                            }
-                        }).catch((error) => {
-                            console.error("error")
-                            console.error(error)
-                        })
-                    })
-            } else {
-                Toast.showShortCenter('网络请求错误:' + res.status)
-            }
-        }).catch((error) => {
-            console.error("error")
-            console.error(error)
-        })
     }
 
     getProfileById = (id) => {
         const { actions } = this.props
 
-        let url = 'http://39.104.189.84:30300/api/v1/user/userById?Id=' + id
-        fetch(url, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'text/html',
-            }
-        }).then((res) => {
-            if (res.status == '200') {
-                res.json()
-                    .then((json) => {
-                        //@TODO fetch中编写逻辑，这样写耦合性太强？
-                        //console.log(json)
-                        //@TODO 获取token两个
-                        var data = genToken()
-
+        let url = SERVER_POST + '/api/v1/user/userById/?Id=' + id
+        console.log('用户id为' + id)
+        // fetch(url).then((res) => {
+        //     if (res.status == '200') {
+        //         res.json()
+        //             .then((json) => {
+                         var data = genToken()
+        var json = getMetaData
                         var authString = JSON.stringify({
                             id: json.id,
                             name: json.name,
@@ -130,15 +106,15 @@ class ChatList extends Component {
                         actions.connectChat(authString) // redux管理聊天socket连接
                         actions.connectLocation(json.name) // redux管理定位信息socket连接
                         actions.setMyProfile(json) // redux管理全局用户信息
-                    })
-            } else {
-                Toast.showShortCenter('网络请求错误:' + res.status)
-            }
-        }).catch((error) => {
-            console.error("error")
-            console.error(error)
+                    //})
+        //     } else {
+        //         Toast.showShortCenter('API Error: 获取用户数据失败')
+        //     }
+        // }).catch((error) => {
+        //     console.error("get profile error")
+        //     console.error(error)
 
-        })
+        // })
     }
 
     loadConvertions = (messageArr) => {
@@ -172,7 +148,7 @@ class ChatList extends Component {
             }
 
             //查找chatlist中的key是否包含该id
-            if (!chatList[tempId]) {
+            // if (!chatList[tempId]) {
                 var tempName = this.getNameById(tempId)
 
                 chatList[tempId] = {
@@ -182,10 +158,10 @@ class ChatList extends Component {
                     lastMsg: msg.content,
                     createTime: msg.createTime
                 }
-            } else {
-                chatList[tempId]['lastMsg'] = msg.content
-                chatList[tempId]['createTime'] = msg.createTime
-            }
+            // } else {
+            //     chatList[tempId]['lastMsg'] = msg.content
+            //     chatList[tempId]['createTime'] = msg.createTime
+            // }
         });
         //this.setState({ chatList })
         return chatList
@@ -193,7 +169,12 @@ class ChatList extends Component {
 
     getNameById = (id) => {
         //const { userMap } = this.state
-        return userMap[id]
+        _userMap = {
+            '160':'巡检人员oncall群',
+            '190':'智能巡检效率沟通群',
+            '205':'felix',
+        }
+        return _userMap[id]
     }
 
     renderItem = (data) => {

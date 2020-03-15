@@ -5,10 +5,10 @@ const BASE_URL = 'http://10.112.17.185:8086'
 export function getMetaData(url) {
     return {
         //测试用户mary
-        "data": maryData,
+        //"data": maryData,
 
         //测试用户felix
-        //"data": felixData
+        "data": maryData
     }
 
     // @TODO 需要登陆的权限

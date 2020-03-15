@@ -99,7 +99,7 @@ class Login extends Component {
     manualLogin = () => {
         // console.log('manualLogin')
         const { username, password } = this.state
-        this.login(username, password)
+        //this.login(username, password)
     }
 
     autoLogin = () => {
@@ -137,6 +137,9 @@ class Login extends Component {
                 return
             }
         })
+        
+        // fast-test
+        this.props.navigation.navigate('Home', { userid: 204 }) // mary 204
     }
 }
 

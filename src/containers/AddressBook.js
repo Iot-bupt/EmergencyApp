@@ -11,6 +11,8 @@ import CoverageCell from '../components/coverageCell';
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { loginActions } from '../actions/index'
+import Toast from '@remobile/react-native-toast'
+import { SERVER_POST } from '../const'
 
 var CoverageArrs = [{
     title: '联系人', persons: [], chatType: 'user'
@@ -45,56 +47,89 @@ class AddressBook extends Component {
     }
 
     getFriendsInfo = (id) => {
-        let url = 'http://39.104.189.84:30300/api/v1/user/user?Id=' + id
-        fetch(url, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'text/html',
-            }
-        }).then((res) => {
-            if (res.status == '200') {
-                res.json()
-                    .then((json) => {
-                        CoverageArrs[0].persons = json
+        // let url = SERVER_POST + '/api/v1/user/user?Id=' + id
+        // fetch(url, {
+        //     method: 'GET',
+        //     headers: {
+        //         'Content-Type': 'text/html',
+        //     }
+        // }).then((res) => {
+        //     if (res.status == '200') {
+        //         res.json()
+        //             .then((json) => {
+            var _test= [
+                {
+                    "id": 201,
+                    "name": "sumory.wu",
+                },
+                {
+                    "id": 202,
+                    "name": "felix",
+                },
+                {
+                    "id": 203,
+                    "name": "sunny",
+                },
+                {
+                    "id": 205,
+                    "name": "bruce",
+                },
+                {
+                    "id": 206,
+                    "name": "bamzi",
+                },
+                {
+                    "id": 207,
+                    "name": "roy",
+                }
+            ]
+                        CoverageArrs[0].persons = _test
                         // fix:两个异步请求后分别setstate，会导致点击无法收缩展开
                         /* 解决方法：在一个请求成功后再请求第二个，强制给两个异步请求排序
                         * 缺点：耦合性太强
                         * this.getGroupsInfo(id)
                         */
                         this.getGroupsInfo(id)
-                    })
-            } else {
-                Toast.showShortCenter('网络请求错误:' + res.status)
-            }
-        }).catch((error) => {
-            console.error("error")
-            console.error(error)
-        })
+        //             })
+        //     } else {
+        //         Toast.showShortCenter('API Error: 获取单聊联系人列表失败')
+        //     }
+        // }).catch((error) => {
+        //     console.error("error")
+        //     console.error(error)
+        // })
     }
 
     getGroupsInfo = (id) => {
-        let url = 'http://39.104.189.84:30300/api/v1/user/groupByUserId?userId=' + id
-        fetch(url, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'text/html',
-            }
-        }).then((res) => {
-            if (res.status == '200') {
-                res.json()
-                    .then((json) => {
-                        CoverageArrs[1].persons = json
+        // let url = SERVER_POST + '/api/v1/user/groupByUserId?userId=' + id
+        // fetch(url).then((res) => {
+        //     if (res.status == '200') {
+        //         res.json()
+        //             .then((json) => {
+                        var groupData=[{
+                            "id": 160,
+                            "name": "巡检人员oncall群"
+                        },
+                        {
+                            "id": 180,
+                            "name": "智能巡检效率沟通群"
+                        },
+                        {
+                            "id": 190,
+                            "name": "应急指挥群"
+                        }]
+                        CoverageArrs[1].persons = groupData
                         this.setState({
                             dataSource: this.state.dataSource.cloneWithRows(CoverageArrs),
                         });
-                    })
-            } else {
-                Toast.showShortCenter('网络请求错误:' + res.status)
-            }
-        }).catch((error) => {
-            console.error("error")
-            console.error(error)
-        })
+        //             })
+        //     } else {
+        //         Toast.showShortCenter('API Error: 获取群聊联系人列表失败')
+        //     }
+        // }).catch((error) => {
+        //     console.error("error")
+        //     console.error(error)
+        // })
     }
 
     detail(title) {

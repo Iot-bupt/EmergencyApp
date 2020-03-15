@@ -5,6 +5,7 @@ import TimeUtils from '../utils/TimeUtil'
 import { chatActions } from '../actions/index'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import Toast from '@remobile/react-native-toast';
 
 var userMapInGroup = {}
 
@@ -164,7 +165,8 @@ class PublicChatroomPage extends Component {
 
     //根据用户Id获取用户名
     getUserNameById(id) {
-        return userMapInGroup[id]
+        //return userMapInGroup[id]
+        return 'Jack'
     }
 
 };
