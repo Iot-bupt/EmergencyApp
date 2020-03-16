@@ -15,8 +15,10 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { loginActions, locationActions } from '../actions/index'
 import StorageUtil from '../utils/StorageUtil'
-import Toast from '@remobile/react-native-toast';
+import Toast from '@remobile/react-native-toast'
+import { getLongitudeAndLatitude } from '../utils/LocationUtil'
 
+var count = 1
 class AboutMyScreen extends React.Component {
     static navigationOptions = {
         header: null
@@ -31,6 +33,11 @@ class AboutMyScreen extends React.Component {
             test: []
         }
     }
+    componentWillUnmount() {
+        if(this.locationInterval !=null) {
+            clearInterval(this.locationInterval)
+        }
+    }
 
     LoginOut = () => {
         const { profile, actions } = this.props
@@ -42,29 +49,84 @@ class AboutMyScreen extends React.Component {
         this.props.navigation.navigate('Login', {})
     }
 
+    /** BUG:使用原生的Geolocation.watchPosition总是在第一次获取后报错
+    * errorCode:3
+    * errorMsg: Provider gps is temporarily unavailable.
+    */
+
     beginWatchLocation() {
-        console.log('Location switch on.')
         Toast.showShortCenter('开始上传定位信息')
 
         const GeoOptions = {
-            maximumAge: 0,
-            timeout: 1000
+            enableHighAccuracy: true,
+            timeout: 60000,
+            maximumAge: 2000,
         }
 
         this.state.watchID = Geolocation.watchPosition((location) => {
             let locationArr = [location.coords.longitude, location.coords.latitude]
-            alert(locationArr[0] + '  ' + locationArr[1])
+            Toast.showShortCenter('位置信息'+ count+':' +locationArr[0] + ',' + locationArr[1])
+            count++
             this.props.actions.sendLocationMessage(this.props.profile.id, this.props.profile.name, locationArr)
         },
             error => {
-                Toast.showShortCenter('获取位置失败')
-                alert(error.message)
+                alert('获取位置失败'+ error.code +':'+ error.message)
+                Geolocation.clearWatch(this.state.watchID);
             }, GeoOptions
         );
     }
     stopWatchLocation() {
-        console.log('Location switch off.')
+        Toast.showShortCenter('停止上传定位信息')
         Geolocation.clearWatch(this.state.watchID);
+    }
+
+    /** 手写定时器获取location */
+    locationInterval = null
+    beginManualLocation = () => {
+        var tmpLng = 0, tmpLat = 0
+        Toast.showShortCenter('开始上传定位信息')
+        // this.locationInterval = setInterval(()=>{
+        //     getLongitudeAndLatitude().then((locationArr)=>{
+        //         Toast.showShortCenter('位置信息'+ count+':' +locationArr[0] + ',' + locationArr[1])
+        //         this.props.actions.sendLocationMessage(count == 1? 1 : 2,this.props.profile.id, this.props.profile.name, locationArr)
+        //         count++
+        //     })
+        // }, 8000)
+        
+        // mock经纬度
+        getLongitudeAndLatitude().then((locationArr)=>{
+            Toast.showShortCenter('位置信息'+ count+':' +locationArr[0] + ',' + locationArr[1])
+            tmpLng = locationArr[0]
+            tmpLat = locationArr[1]
+            this.props.actions.sendLocationMessage(1,this.props.profile.id, this.props.profile.name, locationArr)
+            count++
+        })
+        this.locationInterval = setInterval(()=>{
+            tmpLng = tmpLng + count/200
+            Toast.showShortCenter('位置信息'+ count+':' +tmpLng + ',' + tmpLat)
+            this.props.actions.sendLocationMessage(2,this.props.profile.id, this.props.profile.name, [tmpLng,tmpLat])
+            count++
+            if(count>5 && count<8) {
+                tmpLat = tmpLat + count/100
+                Toast.showShortCenter('位置信息'+ count+':' +tmpLng + ',' + tmpLat)
+                this.props.actions.sendLocationMessage(2,this.props.profile.id, this.props.profile.name, [tmpLng,tmpLat])
+                count++  
+            }
+            if(count>8 && count <10) {
+                tmpLng = tmpLng + count/100
+                Toast.showShortCenter('位置信息'+ count+':' +tmpLng + ',' + tmpLat)
+                this.props.actions.sendLocationMessage(2,this.props.profile.id, this.props.profile.name, [tmpLng,tmpLat])
+                count++  
+            }
+            if(count>10){
+                clearInterval(this.locationInterval)
+            }
+        }, 5000)
+    }
+
+    stopManualLocation = () => {
+        clearInterval(this.locationInterval)
+        Toast.showShortCenter('停止上传定位信息')
     }
 
     render() {
@@ -117,7 +179,8 @@ class AboutMyScreen extends React.Component {
                             <Switch
                                 onValueChange={(value) => {
                                     this.setState({ locationSwitchIsOn: value })
-                                    value ? this.beginWatchLocation() : this.stopWatchLocation()
+                                    //value ? this.beginWatchLocation() : this.stopWatchLocation()
+                                    value ? this.beginManualLocation() : this.stopManualLocation()
                                 }}
                                 style={{ marginBottom: 10, marginTop: 10 }}
                                 value={this.state.locationSwitchIsOn} />

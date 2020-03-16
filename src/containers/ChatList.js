@@ -90,22 +90,22 @@ class ChatList extends Component {
         const { actions } = this.props
 
         let url = SERVER_POST + '/api/v1/user/userById/?Id=' + id
-        console.log('用户id为' + id)
+        console.log('用户id为：' + id)
         // fetch(url).then((res) => {
         //     if (res.status == '200') {
         //         res.json()
         //             .then((json) => {
-                         var data = genToken()
-        var json = getMetaData
-                        var authString = JSON.stringify({
-                            id: json.id,
-                            name: json.name,
-                            token1: data.token1,
-                            token2: data.token2
-                        })
-                        actions.connectChat(authString) // redux管理聊天socket连接
-                        actions.connectLocation(json.name) // redux管理定位信息socket连接
-                        actions.setMyProfile(json) // redux管理全局用户信息
+                            var data = genToken()
+                            var json = getMetaData()
+                            var authString = JSON.stringify({
+                                id: json.id,
+                                name: json.name,
+                                token1: data.token1,
+                                token2: data.token2
+                            })
+                            actions.connectChat(authString) // redux管理聊天socket连接
+                            actions.connectLocation(json.name) // redux管理定位信息socket连接
+                            actions.setMyProfile(json) // redux管理全局用户信息
                     //})
         //     } else {
         //         Toast.showShortCenter('API Error: 获取用户数据失败')

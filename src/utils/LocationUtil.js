@@ -31,6 +31,11 @@ let getLongitudeAndLatitude = () => {
             error => {
                 console.log("获取位置失败：" + error, "")
                 reject(error);
+            },
+            {
+                enableHighAccuracy: false, // 不能为true，否则手机会报timeout
+                maximumAge: 5000,
+                timeout: 10000,
             }
         );
     })
@@ -38,4 +43,4 @@ let getLongitudeAndLatitude = () => {
 
 //@TODO:是否要把beginWatch和stopWatch函数提出到这里
 
-export { getLongitudeAndLatitude, beginWatchLongitudeAndLatitude, stopWatchLocation }
+export { getLongitudeAndLatitude}

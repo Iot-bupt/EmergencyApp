@@ -6,9 +6,8 @@ export function getMetaData(url) {
     return {
         //测试用户mary
         //"data": maryData,
-
-        //测试用户felix
-        "data": maryData
+        id: 204,
+        name: 'Mary'
     }
 
     // @TODO 需要登陆的权限
