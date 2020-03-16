@@ -48,12 +48,11 @@ class AboutMyScreen extends React.Component {
 
         const GeoOptions = {
             maximumAge: 0,
-            timeout: 1000
         }
 
         this.state.watchID = Geolocation.watchPosition((location) => {
             let locationArr = [location.coords.longitude, location.coords.latitude]
-            alert(locationArr[0] + '  ' + locationArr[1])
+            Toast.showShortCenter('result:'+locationArr[0] + '  ' + locationArr[1])
             this.props.actions.sendLocationMessage(this.props.profile.id, this.props.profile.name, locationArr)
         },
             error => {
@@ -63,7 +62,7 @@ class AboutMyScreen extends React.Component {
         );
     }
     stopWatchLocation() {
-        console.log('Location switch off.')
+        Toast.showShortCenter('停止上传定位信息')
         Geolocation.clearWatch(this.state.watchID);
     }
 
@@ -116,7 +115,7 @@ class AboutMyScreen extends React.Component {
                             <Switch
                                 onValueChange={(value) => {
                                     this.setState({ locationSwitchIsOn: value })
-                                    value ? this.beginWatchLocation() : this.stopWatchLocation()
+                                    value ? this.beginWatchLocation() : this.stopWatchLocation() // 使用js的Geolocation定位
                                 }}
                                 style={{ marginBottom: 10, marginTop: 10 }}
                                 value={this.state.locationSwitchIsOn} />

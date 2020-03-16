@@ -1,4 +1,5 @@
 import io from '../utils/socket.io/socket.io';
+import { SOCKET_URL } from '../const'
 let socket
 
 export function receiveMsg(msg) {
@@ -10,7 +11,7 @@ export function receiveMsg(msg) {
 
 export function connectChat(authString) {
     return dispatch => {
-        socket = io.connect('http://39.104.189.84:30200', {
+        socket = io.connect(SOCKET_URL, {
             "reconnect": true,
             "auto connect": true,
             "force new connection": true

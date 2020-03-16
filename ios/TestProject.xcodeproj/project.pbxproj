@@ -58,6 +58,7 @@
 		F3E1650CDB6244B58106F2C9 /* libimageCropPicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F7DC05F9C3374AB789A049CE /* libimageCropPicker.a */; };
 		9BED3C353731451EA23759B3 /* antfill.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BA6D3CF0BDB04CCCBCA461DC /* antfill.ttf */; };
 		B74D1FB757694B2CADB5E2A9 /* antoutline.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9E6D57AC0A9343B797EC91EA /* antoutline.ttf */; };
+		9682B505CA8142D3A1D45C48 /* libAMapGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BACA619743D04EF8BFC4C47B /* libAMapGeolocation.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -387,6 +388,8 @@
 		F7DC05F9C3374AB789A049CE /* libimageCropPicker.a */ = {isa = PBXFileReference; name = "libimageCropPicker.a"; path = "libimageCropPicker.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		BA6D3CF0BDB04CCCBCA461DC /* antfill.ttf */ = {isa = PBXFileReference; name = "antfill.ttf"; path = "../node_modules/@ant-design/icons-react-native/fonts/antfill.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		9E6D57AC0A9343B797EC91EA /* antoutline.ttf */ = {isa = PBXFileReference; name = "antoutline.ttf"; path = "../node_modules/@ant-design/icons-react-native/fonts/antoutline.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		4F93F12E07374499BC7876C8 /* AMapGeolocation.xcodeproj */ = {isa = PBXFileReference; name = "AMapGeolocation.xcodeproj"; path = "../node_modules/react-native-amap-geolocation/lib/ios/AMapGeolocation.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		BACA619743D04EF8BFC4C47B /* libAMapGeolocation.a */ = {isa = PBXFileReference; name = "libAMapGeolocation.a"; path = "libAMapGeolocation.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -417,6 +420,7 @@
 				340D670A5D0D45C181E55C0F /* libRNVectorIcons.a in Frameworks */,
 				3948181E64F2436CBE5A82A0 /* libRNGestureHandler.a in Frameworks */,
 				F3E1650CDB6244B58106F2C9 /* libimageCropPicker.a in Frameworks */,
+				9682B505CA8142D3A1D45C48 /* libAMapGeolocation.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -607,6 +611,7 @@
 				C009B932C5DD4A4A8C8D4EF2 /* RNVectorIcons.xcodeproj */,
 				2C0999BB2F13410488C7B36D /* RNGestureHandler.xcodeproj */,
 				6B9F8E7AAC6C4961A0D9F069 /* imageCropPicker.xcodeproj */,
+				4F93F12E07374499BC7876C8 /* AMapGeolocation.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1281,6 +1286,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1308,6 +1314,7 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestProject.app/TestProject";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1400,6 +1407,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1435,6 +1443,7 @@
 				TVOS_DEPLOYMENT_TARGET = 9.2;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1477,6 +1486,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1511,6 +1521,7 @@
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",

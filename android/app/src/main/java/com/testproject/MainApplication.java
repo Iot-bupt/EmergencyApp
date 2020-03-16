@@ -3,6 +3,7 @@ package com.testproject;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import cn.qiuxiang.react.geolocation.AMapGeolocationPackage;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -28,6 +29,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new AMapGeolocationPackage(),
             new PickerPackage(),
             new RNGestureHandlerPackage(),
             new VectorIconsPackage(),
