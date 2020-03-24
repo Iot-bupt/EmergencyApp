@@ -87,12 +87,16 @@ class PublicChatroomPage extends Component {
                 <View style={styles.footer}>
                     <View style={styles.textInput}>
                         <View style={{ flex: 4, borderStyle: 'solid', borderColor: 'rgb(203,205,208)', borderWidth: 1 }}>
-                            <TextInput value={this.state.inputMsg} onChangeText={(inputMsg) => this.setState({ inputMsg })} />
+                            <TextInput
+                                value={this.state.inputMsg}
+                                onChangeText={(inputMsg) => this.setState({ inputMsg })}
+                                placeholder='请输入文字内容'
+                                />
                             {/* onChangeText监听TextInput组件值的变化，并与state绑定 */}
                         </View>
                         <View style={styles.sendBtn}>
                             <TouchableOpacity onPress={() => { this.sendMessage(this.myProfile.id, this.chatWithId) }}>
-                                <Text style={{ color: 'white', height: 30, alignItems: 'center', lineHeight: 40 }} >Send</Text>
+                                <Text style={{ color: 'white', height: 30, alignItems: 'center', lineHeight: 40 }} >发送</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

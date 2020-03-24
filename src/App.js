@@ -72,7 +72,7 @@ const AppNavigator = createStackNavigator({
 }, {
         initialRouteName: 'Login',
         navigationOptions: {
-            title: '应急指挥',
+            title: '智能巡检客户端',
             headerStyle: {
                 backgroundColor: '#1a1a1a',
             },

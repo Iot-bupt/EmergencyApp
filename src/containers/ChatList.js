@@ -55,7 +55,8 @@ class ChatList extends Component {
 
     getAllFriends = (id) => {
         //var userMap = {}
-        let getfriend_url = SERVER_URL + '/api/v1/user/user?Id=' + id
+        let getfriend_url = SERVER_URL + '/api/v1/user/allUsers'
+        //let getfriend_url = SERVER_URL + '/api/v1/user/user?Id=' + id
         //获取所有单聊联系人
         fetch(getfriend_url, {
             method: 'GET',
@@ -89,7 +90,7 @@ class ChatList extends Component {
                                         //this.setState({ userMap })
                                     })
                             } else {
-                                Toast.showShortCenter('网络请求错误:' + res.status)
+                                Toast.showShortCenter('获取群聊联系人错误:' + res.status)
                             }
                         }).catch((error) => {
                             console.error("error")
@@ -97,7 +98,7 @@ class ChatList extends Component {
                         })
                     })
             } else {
-                Toast.showShortCenter('网络请求错误:' + res.status)
+                Toast.showShortCenter('获取单聊联系人错误:' + res.status)
             }
         }).catch((error) => {
             console.error("error")
@@ -134,7 +135,7 @@ class ChatList extends Component {
                         actions.setMyProfile(json) // redux管理全局用户信息
                     })
             } else {
-                Toast.showShortCenter('网络请求错误:' + res.status)
+                Toast.showShortCenter('获取账户信息错误:' + res.status)
             }
         }).catch((error) => {
             console.error("error")

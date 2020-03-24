@@ -6,7 +6,7 @@
  */
 
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, ListView, Image } from 'react-native';
+import { StyleSheet, View, Text, ListView, ScrollView } from 'react-native';
 import CoverageCell from '../components/coverageCell';
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -47,7 +47,8 @@ class AddressBook extends Component {
     }
 
     getFriendsInfo = (id) => {
-        let url = SERVER_URL + '/api/v1/user/user?Id=' + id
+        let url = SERVER_URL + '/api/v1/user/allUsers'
+        //let url = SERVER_URL + '/api/v1/user/user?Id=' + id
         fetch(url, {
             method: 'GET',
             headers: {
@@ -66,7 +67,7 @@ class AddressBook extends Component {
                         this.getGroupsInfo(id)
                     })
             } else {
-                Toast.showShortCenter('网络请求错误:' + res.status)
+                Toast.showShortCenter('获取单聊联系人错误:' + res.status)
             }
         }).catch((error) => {
             console.error("error")
@@ -91,7 +92,7 @@ class AddressBook extends Component {
                         });
                     })
             } else {
-                Toast.showShortCenter('网络请求错误:' + res.status)
+                Toast.showShortCenter('获取群聊联系人错误:' + res.status)
             }
         }).catch((error) => {
             console.error("error")
@@ -105,11 +106,11 @@ class AddressBook extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={styles.chatlist}>
+                <ScrollView style={styles.chatlist}>
                     <View style={{ flex: 1 }}>
                         <ListView style={{ flex: 1 }} dataSource={this.state.dataSource} renderRow={this.renderMover.bind(this)} />
                     </View>
-                </View>
+                </ScrollView>
             </View>
         )
     }

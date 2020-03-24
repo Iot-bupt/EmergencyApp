@@ -1,20 +1,24 @@
-//import WS from 'react-native-websocket'
-import { SERVER_POST } from '../const'
+import { LOCATION_WS_URL } from '../const'
+import Toast from '@remobile/react-native-toast';
 var ws
 var TEST_URL = "ws://echo.websocket.org" //连接测试url
-var BASE_URL = "ws://"+ SERVER_POST + "/api/v1/map/websocket"
 
 export function connectLocation(username) {
-    var url = BASE_URL + '?username=' + username + '&usertype=producer'
+    //var url = BASE_URL + '?username=' + username + '&usertype=producer' 信息管理系统接口
     return dispatch => {
-        ws = new WebSocket(url);
+        //ws = new WebSocket(url);
+        ws = new WebSocket(LOCATION_WS_URL, [username]);
 
         ws.onopen = function (evt) {
             console.log("信息管理：socket连接成功！");
+            Toast.showShortCenter("信息管理：socket连接成功！")
         };
 
         ws.onmessage = function (evt) {
             console.log("信息管理：Received Message: " + evt.data);
+            if (evt.data && evt.data.type == 6) {
+                Toast.showShortCenter(evt.data.nickname + '已偏离路线！')
+            }
         };
 
         ws.onclose = function (evt) {
@@ -28,15 +32,23 @@ export function connectLocation(username) {
     }
 }
 
-export function sendLocationMessage(id, name, locationArr) {
+export function sendLocationMessage(type, id, name, locationArr) {
     return dispatch => {
+        // var sendMessage = {
+        //     tenantId: id,
+        //     staffName: name,
+        //     data: [{
+        //         longtitude: locationArr[0],
+        //         latitude: locationArr[1]
+        //     }]
+        // }
         var sendMessage = {
-            tenantId: id,
-            staffName: name,
-            data: [{
-                longtitude: locationArr[0],
-                latitude: locationArr[1]
-            }]
+            type,
+            nickname: name,
+            msg: {
+                lng: locationArr[0],
+                lat: locationArr[1]
+            }
         }
         console.log(sendMessage)
         ws.send(JSON.stringify(sendMessage))

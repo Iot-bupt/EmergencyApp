@@ -1,4 +1,5 @@
 import io from '../utils/socket.io/socket.io';
+import Toast from '@remobile/react-native-toast'
 import { SOCKET_URL } from '../const'
 let socket
 
@@ -19,6 +20,8 @@ export function connectChat(authString) {
 
         socket.on("connect_error", function (error) {
             console.error(error);
+            Toast.showShortCenter('应急指挥socket连接失败')
+            socket.close()
         });
         socket.on('disconnect', function () {
             console.log('disconnect')
