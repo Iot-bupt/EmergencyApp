@@ -15,7 +15,7 @@
     "events": "^3.0.0",
     "react": "16.6.0-alpha.8af6728",
     "react-dom": "^16.7.0",
-    "react-native": "0.57.4",
+    "react-native": "0.70.2",
     "react-native-amap-geolocation": "^1.0.4",
     "react-native-gesture-handler": "^1.0.9",
     "react-native-image-crop-picker": "^0.21.3",
